@@ -15,6 +15,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_PROD_API_KEY}}
           heroku_app_name: "learntrack" #Must be unique in Heroku
           heroku_email: ${{env.HEROKU_EMAIL}}
+          branch: "prod"
 
   # Slack通知処理を呼び出す
   slack_notification:
