@@ -45,19 +45,33 @@ jobs:
     - name: Build Check
       run: pnpm run build
 
+  migration_db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Apply all pending migrations to the database
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
   # Slack通知処理を呼び出す
   slack_notification:
     # deploy_apiの後に実行されるようにする
-    needs: check_and_build
+    needs: [check_and_build, migration_db]
     # deploy_apiが成功していても失敗していても実行されるようにする
     if: ${{ always() }}
     uses: ./.github/workflows/slack_notify.yml
     with:
       slack_channel: notify
       # needs.<job_id>.resultで前のジョブの結果を参照できる(success、failure、cancelled、および skipped)
-      slack_color: ${{ needs.deploy.result == 'success' && 'good' || 'danger' }}
+      slack_color: ${{ (needs.check_and_build.result == 'success' && needs.migration_db.result == 'success') && 'good' || 'danger' }}
       slack_username: GitHub Actions Results
       slack_icon: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
       slack_title: Deployment to Cloudflare Workers in ${{ github.repository }}
-      slack_message: ${{ needs.deploy.result == 'success' && ':white_check_mark:Deployment successful' || ':x:Deployment failed' }}
+      slack_message: ${{ (needs.check_and_build.result == 'success' && needs.migration_db.result == 'success') && ':white_check_mark:Deployment successful' || ':x:Deployment failed' }}
     secrets: inherit

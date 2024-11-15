@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p $PORT",
     "migrate:dev": "npx prisma migrate dev",
-    "migrate:prod": "npx prisma migrate deploy",
+    "migrate:prod": "DATABASE_URL=$(cat .env.prod | grep DATABASE_URL | cut -d '=' -f2) npx prisma migrate deploy",
     "generate": "npx prisma generate",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
