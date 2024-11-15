@@ -19,7 +19,7 @@ jobs:
   # Slack通知処理を呼び出す
   slack_notification:
     # deploy_apiの後に実行されるようにする
-    needs: deploy
+    needs: build
     # deploy_apiが成功していても失敗していても実行されるようにする
     if: ${{ always() }}
     uses: ./.github/workflows/slack_notify.yml
