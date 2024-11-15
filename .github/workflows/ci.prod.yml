@@ -1,0 +1,34 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.13.15 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_PROD_API_KEY}}
+          heroku_app_name: "LearnTrack" #Must be unique in Heroku
+          heroku_email: ${{variables.HEROKU_EMAIL}}
+
+  # Slack通知処理を呼び出す
+  slack_notification:
+    # deploy_apiの後に実行されるようにする
+    needs: deploy
+    # deploy_apiが成功していても失敗していても実行されるようにする
+    if: ${{ always() }}
+    uses: ./.github/workflows/slack_notify.yml
+    with:
+      slack_channel: notify
+      # needs.<job_id>.resultで前のジョブの結果を参照できる(success、failure、cancelled、および skipped)
+      slack_color: ${{ needs.deploy.result == 'success' && 'good' || 'danger' }}
+      slack_username: GitHub Actions Results
+      slack_icon: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+      slack_title: Deployment to Cloudflare Workers in ${{ github.repository }}
+      slack_message: ${{ needs.deploy.result == 'success' && ':white_check_mark:Deployment successful' || ':x:Deployment failed' }}
+    secrets: inherit
