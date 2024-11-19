@@ -64,6 +64,7 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install
+      
     - name: Apply all pending migrations to the database
       run: npx prisma migrate deploy
       env:
