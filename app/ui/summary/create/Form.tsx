@@ -282,8 +282,8 @@ export default function Create() {
                 </>
               ) : (
                 <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                  No summary generated yet. Click "Create Summary" to generate
-                  one.
+                  No summary generated yet. Click &ldquo;Create Summary&ldquo;
+                  to generate one.
                 </Typography>
               )}
             </Paper>
