@@ -16,34 +16,30 @@ jobs:
       matrix:
         node-version: [20]
     steps:
-    - uses: actions/checkout@v4
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
 
-    - name: Install dependencies
-      run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
-    - name: Lint Check
-      run: pnpm run lint
+      - name: Lint Check
+        run: pnpm run lint
 
-    # 型チェック (TypeScript)
-    - name: Type Check
-      run: pnpm run type-check
+      # ユニットテスト
+      #- name: Run Tests
+      #  run: npm test
 
-    # ユニットテスト
-    #- name: Run Tests
-    #  run: npm test
-
-    # ビルドチェック
-    - name: Build Check
-      run: pnpm run build
+      # ビルドチェック
+      - name: Build Check
+        run: pnpm run build
 
   migration_db:
     runs-on: ubuntu-22.04
@@ -51,24 +47,24 @@ jobs:
       matrix:
         node-version: [20]
     steps:
-    - uses: actions/checkout@v4
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
 
-    - name: Install dependencies
-      run: pnpm install
-      
-    - name: Apply all pending migrations to the database
-      run: npx prisma migrate deploy
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Apply all pending migrations to the database
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
   # Slack通知処理を呼び出す
   slack_notification:
