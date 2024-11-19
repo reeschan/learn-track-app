@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "pnpm generate && next build",
     "start": "next start -p $PORT",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:prod": "DATABASE_URL=$(cat .env.prod | grep DATABASE_URL | cut -d '=' -f2) npx prisma migrate deploy",
