@@ -1,0 +1,28 @@
+#!/bin/bash
+# Windows用Git Hooksのスクリプト
+
+# コマンドのエラーメッセージを表示する関数
+run_command() {
+  cmd.exe /c "$1"
+  if [ $? -ne 0 ]; then
+    echo "❌ コマンドに失敗しました: $1"
+    exit 1
+  fi
+}
+
+echo "🛠️ Pre-commit checks running..."
+
+# Lintチェック
+echo "🔍 Running lint..."
+run_command "pnpm lint"
+
+# Typeチェック
+echo "🔍 Running type-check..."
+run_command "pnpm type-check"
+
+# ビルドチェック
+echo "🔍 Running build..."
+run_command "pnpm build"
+
+echo "✅ 全てのチェックが成功しました。"
+exit 0
