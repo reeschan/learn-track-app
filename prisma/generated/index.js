@@ -181,7 +181,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\owner\\Documents\\dev\\myapp\\learn-track-app\\prisma\\generated",
+      "value": "C:\\Users\\nurup\\OneDrive\\ドキュメント\\kaihatu\\Dev\\learn-track-app\\prisma\\generated",
       "fromEnvVar": null
     },
     "config": {
@@ -195,11 +195,12 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\owner\\Documents\\dev\\myapp\\learn-track-app\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\nurup\\OneDrive\\ドキュメント\\kaihatu\\Dev\\learn-track-app\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null
+    "rootEnvPath": null,
+    "schemaEnvPath": "../../.env"
   },
   "relativePath": "..",
   "clientVersion": "5.22.0",
@@ -217,8 +218,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id           String    @id @default(uuid()) @db.Uuid\n  username     String\n  email        String    @unique\n  passwordHash String\n  createdAt    DateTime  @default(now())\n  updatedAt    DateTime  @updatedAt\n  lastLogin    DateTime?\n\n  summaries     Summary[]\n  chatHistories ChatGPTHistory[]\n}\n\nmodel Summary {\n  id        String   @id @default(uuid()) @db.Uuid\n  userId    String   @db.Uuid\n  title     String\n  content   String\n  summary   String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user       User              @relation(fields: [userId], references: [id])\n  tags       SummaryTag[]\n  categories SummaryCategory[]\n}\n\nmodel Tag {\n  id        String   @id @default(uuid()) @db.Uuid\n  name      String   @unique\n  createdAt DateTime @default(now())\n\n  summaryTags SummaryTag[]\n}\n\nmodel SummaryTag {\n  summaryId String   @db.Uuid\n  tagId     String   @db.Uuid\n  createdAt DateTime @default(now())\n\n  summary Summary @relation(fields: [summaryId], references: [id])\n  tag     Tag     @relation(fields: [tagId], references: [id])\n\n  @@id([summaryId, tagId])\n}\n\nmodel Category {\n  id        String   @id @default(uuid()) @db.Uuid\n  name      String   @unique\n  createdAt DateTime @default(now())\n\n  summaryCategories SummaryCategory[]\n}\n\nmodel SummaryCategory {\n  summaryId  String   @db.Uuid\n  categoryId String   @db.Uuid\n  createdAt  DateTime @default(now())\n\n  summary  Summary  @relation(fields: [summaryId], references: [id])\n  category Category @relation(fields: [categoryId], references: [id])\n\n  @@id([summaryId, categoryId])\n}\n\nmodel ChatGPTHistory {\n  id        String   @id @default(uuid()) @db.Uuid\n  userId    String   @db.Uuid\n  title     String\n  content   String\n  summary   String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user User @relation(fields: [userId], references: [id])\n}\n",
-  "inlineSchemaHash": "4cdacd42f9c6829e63bd87e5cc9cd0807fe9ed9371a06192cc8def1665579af7",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ngenerator zod {\n  provider          = \"zod-prisma-types\"\n  useMultipleFiles  = true\n  writeBarrelFiles  = false\n  useTypeAssertions = true\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id           String    @id @default(uuid()) @db.Uuid\n  username     String\n  email        String    @unique\n  passwordHash String\n  createdAt    DateTime  @default(now())\n  updatedAt    DateTime  @updatedAt\n  lastLogin    DateTime?\n\n  summaries     Summary[]\n  chatHistories ChatGPTHistory[]\n}\n\nmodel Summary {\n  id        String   @id @default(uuid()) @db.Uuid\n  userId    String   @db.Uuid\n  title     String\n  content   String\n  summary   String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user       User              @relation(fields: [userId], references: [id])\n  tags       SummaryTag[]\n  categories SummaryCategory[]\n}\n\nmodel Tag {\n  id        String   @id @default(uuid()) @db.Uuid\n  name      String   @unique\n  createdAt DateTime @default(now())\n\n  summaryTags SummaryTag[]\n}\n\nmodel SummaryTag {\n  summaryId String   @db.Uuid\n  tagId     String   @db.Uuid\n  createdAt DateTime @default(now())\n\n  summary Summary @relation(fields: [summaryId], references: [id])\n  tag     Tag     @relation(fields: [tagId], references: [id])\n\n  @@id([summaryId, tagId])\n}\n\nmodel Category {\n  id        String   @id @default(uuid()) @db.Uuid\n  name      String   @unique\n  createdAt DateTime @default(now())\n\n  summaryCategories SummaryCategory[]\n}\n\nmodel SummaryCategory {\n  summaryId  String   @db.Uuid\n  categoryId String   @db.Uuid\n  createdAt  DateTime @default(now())\n\n  summary  Summary  @relation(fields: [summaryId], references: [id])\n  category Category @relation(fields: [categoryId], references: [id])\n\n  @@id([summaryId, categoryId])\n}\n\nmodel ChatGPTHistory {\n  id        String   @id @default(uuid()) @db.Uuid\n  userId    String   @db.Uuid\n  title     String\n  content   String\n  summary   String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user User @relation(fields: [userId], references: [id])\n}\n",
+  "inlineSchemaHash": "ac2efa975047a17ed4aa88e37e128d4b92ee553fcf4d3cb56ff01325a9df3ea7",
   "copyEngine": true
 }
 
