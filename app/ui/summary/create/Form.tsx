@@ -27,7 +27,8 @@ import {
   Delete as DeleteIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import { Summary } from "@/app/lib/types";
+import { CompleteSummaryRequest, Summary } from "@/app/lib/types";
+import summaryService from "@/app/lib/actions";
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -56,17 +57,11 @@ export default function Create() {
   const handleCreateSummary = async () => {
     setIsLoading(true);
     try {
-      // This is a mock API call. Replace with actual oneai API call
-      const response = await fetch("https://api.oneai.com/summarize", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": "YOUR_ONEAI_API_KEY", // Replace with your actual API key
-        },
-        body: JSON.stringify({ text: content }),
+      const response = await summaryService.createSummary({
+        title,
+        content,
       });
-      const data = await response.json();
-      setGeneratedSummary(data.summary);
+      setGeneratedSummary(response.summary);
     } catch (error) {
       console.error("Error generating summary:", error);
       setGeneratedSummary("Error generating summary. Please try again.");
@@ -75,21 +70,27 @@ export default function Create() {
     }
   };
 
-  const handleCompleteSummary = () => {
-    const newSummary: Summary = {
-      id: Date.now().toString(),
+  const handleCompleteSummary = async () => {
+    const newSummary: CompleteSummaryRequest = {
       title: title,
       content: content,
       summary: generatedSummary,
       categories: categories.map((c) => c.text),
       tags: tags.map((t) => t.text),
     };
-    setSummaries([...summaries, newSummary]);
-    setContent("");
-    setTitle("");
-    setTags([]);
-    setCategories([]);
-    setGeneratedSummary("");
+
+    try {
+      const savedSummary = await summaryService.completeSummary(newSummary);
+      setSummaries([...summaries, savedSummary]);
+    } catch (error) {
+      console.error("Error completing summary:", error);
+    } finally {
+      setContent("");
+      setTitle("");
+      setTags([]);
+      setCategories([]);
+      setGeneratedSummary("");
+    }
   };
 
   const handleEditSummary = (summary: Summary) => {
