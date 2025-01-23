@@ -27,15 +27,7 @@ import {
   Delete as DeleteIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-
-interface Summary {
-  id: string;
-  title: string;
-  content: string;
-  summary: string;
-  categories: string[];
-  tags: string[];
-}
+import { Summary } from "@/app/lib/types";
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";

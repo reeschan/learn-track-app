@@ -1,9 +1,5 @@
 import { NextConfig } from "next/dist/types";
 
-const nextConfig: NextConfig = {
-  experimental: {
-    ppr: "incremental",
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
