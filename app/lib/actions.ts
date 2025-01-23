@@ -5,7 +5,7 @@ import {
   Summary,
 } from "./types";
 import { z } from "zod";
-import { openaiCreateSummary } from "../ui/summary/create/services/openai";
+import { openaiCreateSummary } from "../services/openai";
 import { prisma } from "@/middleware";
 
 const CreateSummarySchema = z.object({
@@ -21,12 +21,13 @@ const CompleteSummarySchema = CreateSummarySchema.extend({
 
 // リクエストとレスポンスをログに記録するデコレータ
 function LogRequestResponse(
-  target: any,
+  target: object,
   propertyKey: string,
   descriptor: PropertyDescriptor
 ) {
   const originalMethod = descriptor.value;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   descriptor.value = async function (...args: any[]) {
     console.log(`🟢 Request to ${propertyKey}:`, JSON.stringify(args));
 
