@@ -1,5 +1,5 @@
+import { OpenAICreateSummaryResponse } from "app/lib/types";
 import OpenAI from "openai";
-import { OpenAICreateSummaryResponse } from "../lib/types";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

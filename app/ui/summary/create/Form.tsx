@@ -27,8 +27,8 @@ import {
   Delete as DeleteIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import { CompleteSummaryRequest, Summary } from "@/app/lib/types";
-import summaryService from "@/app/lib/actions";
+import { CompleteSummaryRequest, Summary } from "app/lib/types";
+import { completeSummary, createSummary } from "app/lib/actions";
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -57,7 +57,7 @@ export default function Create() {
   const handleCreateSummary = async () => {
     setIsLoading(true);
     try {
-      const response = await summaryService.createSummary({
+      const response = await createSummary({
         title,
         content,
       });
@@ -80,7 +80,7 @@ export default function Create() {
     };
 
     try {
-      const savedSummary = await summaryService.completeSummary(newSummary);
+      const savedSummary = await completeSummary(newSummary);
       setSummaries([...summaries, savedSummary]);
     } catch (error) {
       console.error("Error completing summary:", error);

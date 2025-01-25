@@ -3,9 +3,9 @@ import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { authConfig } from "./auth.config";
 import { z } from "zod";
-import { PrismaClient } from "@/prisma/generated";
+import { PrismaClient } from "prisma/generated";
 import bcrypt from "bcrypt";
-import { User } from "@/app/lib/types";
+import { User } from "app/lib/types";
 
 const prismaClient = new PrismaClient();
 
