@@ -181,7 +181,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\nurup\\OneDrive\\ドキュメント\\kaihatu\\Dev\\learn-track-app\\prisma\\generated",
+      "value": "C:\\Users\\owner\\Documents\\dev\\myapp\\learn-track-app\\prisma\\generated",
       "fromEnvVar": null
     },
     "config": {
@@ -195,7 +195,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\nurup\\OneDrive\\ドキュメント\\kaihatu\\Dev\\learn-track-app\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\owner\\Documents\\dev\\myapp\\learn-track-app\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

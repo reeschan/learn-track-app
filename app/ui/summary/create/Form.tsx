@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import {
   AppBar,
   Toolbar,
@@ -9,26 +9,37 @@ import {
   Paper,
   TextField,
   Button,
-  List,
-  ListItem,
-  ListItemText,
   Chip,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Box,
-  CircularProgress,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Close as CloseIcon,
-} from "@mui/icons-material";
-import { CompleteSummaryRequest, Summary } from "app/lib/types";
+import { Add as AddIcon, Close as CloseIcon } from "@mui/icons-material";
 import { completeSummary, createSummary } from "app/lib/actions";
+import { SummarySchema } from "app/lib/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { FormContainer, TextFieldElement } from "react-hook-form-mui";
+import Loading from "app/ui/common/Loading";
+import router from "next/router";
+
+type SummaryFormSchemaType = {
+  type: "create" | "complete";
+  title: string;
+  content: string;
+  summary: string;
+};
+
+const SummaryFieldItem = {
+  type: "type",
+  title: "title",
+  content: "content",
+  summary: "summary",
+} as const;
+
+type SummaryFieldItem =
+  (typeof SummaryFieldItem)[keyof typeof SummaryFieldItem];
+
+type SummaryFieldItemType = Record<keyof typeof SummaryFieldItem, string>;
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -40,77 +51,77 @@ const getRandomColor = () => {
 };
 
 export default function Create() {
-  const [summaries, setSummaries] = useState<Summary[]>([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [currentSummary, setCurrentSummary] = useState<Summary | null>(null);
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
   const [newTag, setNewTag] = useState("");
   const [newCategory, setNewCategory] = useState("");
   const [tags, setTags] = useState<{ text: string; color: string }[]>([]);
   const [categories, setCategories] = useState<
     { text: string; color: string }[]
   >([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [generatedSummary, setGeneratedSummary] = useState("");
 
-  const handleCreateSummary = async () => {
-    setIsLoading(true);
-    try {
+  const [isCreateSummaryPending, startCreateSummaryTransition] =
+    useTransition();
+
+  const [isCompleteSummaryPending, startCompleteSummaryTransition] =
+    useTransition();
+
+  const {
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors },
+  } = useForm<SummaryFormSchemaType>({
+    resolver: zodResolver(SummarySchema),
+    defaultValues: {
+      type: "create",
+      title: "",
+      content: "",
+      summary: "",
+    },
+  });
+
+  const handleCreateSummary = (payload: SummaryFieldItemType) => {
+    setValue(SummaryFieldItem.type, "create");
+    startCreateSummaryTransition(async () => {
       const response = await createSummary({
-        title,
-        content,
+        title: payload.title,
+        content: payload.content,
+        tags: tags.map((tag) => tag.text),
+        categories: categories.map((category) => category.text),
       });
-      setGeneratedSummary(response.summary);
-    } catch (error) {
-      console.error("Error generating summary:", error);
-      setGeneratedSummary("Error generating summary. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  const handleCompleteSummary = async () => {
-    const newSummary: CompleteSummaryRequest = {
-      title: title,
-      content: content,
-      summary: generatedSummary,
-      categories: categories.map((c) => c.text),
-      tags: tags.map((t) => t.text),
-    };
+      if (response.handleErrors) {
+        return;
+      }
 
-    try {
-      const savedSummary = await completeSummary(newSummary);
-      setSummaries([...summaries, savedSummary]);
-    } catch (error) {
-      console.error("Error completing summary:", error);
-    } finally {
-      setContent("");
-      setTitle("");
-      setTags([]);
-      setCategories([]);
-      setGeneratedSummary("");
-    }
-  };
+      setValue(SummaryFieldItem.summary, response.summary);
 
-  const handleEditSummary = (summary: Summary) => {
-    setCurrentSummary(summary);
-    setOpenDialog(true);
-  };
-
-  const handleDeleteSummary = (id: string) => {
-    setSummaries(summaries.filter((summary) => summary.id !== id));
-  };
-
-  const handleSaveSummary = () => {
-    if (currentSummary) {
-      setSummaries(
-        summaries.map((summary) =>
-          summary.id === currentSummary.id ? currentSummary : summary
-        )
+      setTags(
+        response.tags.map((tag) => ({ text: tag, color: getRandomColor() }))
       );
-    }
-    setOpenDialog(false);
+      setCategories(
+        response.categories.map((category) => ({
+          text: category,
+          color: getRandomColor(),
+        }))
+      );
+    });
+  };
+
+  const handleCompleteSummary = (payload: SummaryFieldItemType) => {
+    setValue(SummaryFieldItem.type, "complete");
+    startCompleteSummaryTransition(async () => {
+      const response = await completeSummary({
+        ...payload,
+        tags: tags.map((tag) => tag.text),
+        categories: categories.map((category) => category.text),
+      });
+
+      if (response.handleErrors) {
+        return;
+      }
+      //成功するなら一覧ページに遷移してこのサマリーIDをセットする
+      router.push(`/summary/list/${response.id}`);
+    });
   };
 
   const handleAddTag = () => {
@@ -150,261 +161,152 @@ export default function Create() {
           <Typography variant="h6">Review App</Typography>
         </Toolbar>
       </AppBar>
+      (
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 2, height: "100%" }}>
-              <Typography variant="h5" gutterBottom>
-                Create New Summary
-              </Typography>
-              <TextField
-                fullWidth
-                label="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Enter content to summarize"
-                sx={{ mb: 2 }}
-              />
-              <Box display="flex" alignItems="center" sx={{ mb: 2 }}>
-                <TextField
-                  label="Add Tag"
-                  value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  sx={{ mr: 1 }}
-                />
-                <IconButton onClick={handleAddTag}>
-                  <AddIcon />
-                </IconButton>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                {tags.map((tag) => (
-                  <Chip
-                    key={tag.text}
-                    label={tag.text}
-                    onDelete={() => handleDeleteTag(tag.text)}
-                    sx={{
-                      mr: 1,
-                      mb: 1,
-                      backgroundColor: tag.color,
-                      color: "white",
-                    }}
-                    deleteIcon={<CloseIcon />}
+        {isCompleteSummaryPending ? (
+          <Loading />
+        ) : (
+          <FormContainer onSuccess={(data) => console.log(data)}>
+            <TextFieldElement
+              name={SummaryFieldItem.type}
+              defaultValue="create"
+              hidden
+            />
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <Paper sx={{ p: 2, height: "100%" }}>
+                  <TextFieldElement
+                    fullWidth
+                    name={SummaryFieldItem.title}
+                    label="Title"
+                    control={control}
+                    sx={{ mb: 2 }}
+                    error={!!errors.title}
+                    helperText={errors.title?.message?.toString()}
                   />
-                ))}
-              </Box>
-              <Box display="flex" alignItems="center" sx={{ mb: 2 }}>
-                <TextField
-                  label="Add Category"
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  sx={{ mr: 1 }}
-                />
-                <IconButton onClick={handleAddCategory}>
-                  <AddIcon />
-                </IconButton>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                {categories.map((category) => (
-                  <Chip
-                    key={category.text}
-                    label={category.text}
-                    onDelete={() => handleDeleteCategory(category.text)}
-                    sx={{
-                      mr: 1,
-                      mb: 1,
-                      backgroundColor: category.color,
-                      color: "white",
-                    }}
-                    deleteIcon={<CloseIcon />}
+                  <TextFieldElement
+                    fullWidth
+                    multiline
+                    rows={4}
+                    name={SummaryFieldItem.content}
+                    control={control}
+                    placeholder="Enter content to summarize"
+                    sx={{ mb: 2 }}
+                    error={!!errors.content}
+                    helperText={errors.content?.message?.toString()}
                   />
-                ))}
-              </Box>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleCreateSummary}
-                disabled={isLoading}
-              >
-                Create Summary
-              </Button>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Paper
-              sx={{
-                p: 2,
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Typography variant="h5" gutterBottom>
-                Generated Summary
-              </Typography>
-              {isLoading ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
-                  }}
-                >
-                  <CircularProgress />
-                </Box>
-              ) : generatedSummary ? (
-                <>
-                  <Typography variant="body1" sx={{ mb: 2, flexGrow: 1 }}>
-                    {generatedSummary}
-                  </Typography>
+                  <Box display="flex" alignItems="center" sx={{ mb: 2 }}>
+                    <TextField
+                      label="Add Tag"
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      sx={{ mr: 1 }}
+                    />
+                    <IconButton onClick={handleAddTag}>
+                      <AddIcon />
+                    </IconButton>
+                  </Box>
+                  <Box sx={{ mb: 2 }}>
+                    {tags.map((tag) => (
+                      <Chip
+                        key={tag.text}
+                        label={tag.text}
+                        onDelete={() => handleDeleteTag(tag.text)}
+                        sx={{
+                          mr: 1,
+                          mb: 1,
+                          backgroundColor: tag.color,
+                          color: "white",
+                        }}
+                        deleteIcon={<CloseIcon />}
+                      />
+                    ))}
+                  </Box>
+                  <Box display="flex" alignItems="center" sx={{ mb: 2 }}>
+                    <TextField
+                      label="Add Category"
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      sx={{ mr: 1 }}
+                    />
+                    <IconButton onClick={handleAddCategory}>
+                      <AddIcon />
+                    </IconButton>
+                  </Box>
+                  <Box sx={{ mb: 2 }}>
+                    {categories.map((category) => (
+                      <Chip
+                        key={category.text}
+                        label={category.text}
+                        onDelete={() => handleDeleteCategory(category.text)}
+                        sx={{
+                          mr: 1,
+                          mb: 1,
+                          backgroundColor: category.color,
+                          color: "white",
+                        }}
+                        deleteIcon={<CloseIcon />}
+                      />
+                    ))}
+                  </Box>
                   <Button
                     variant="contained"
-                    onClick={handleCompleteSummary}
-                    sx={{ alignSelf: "flex-end" }}
+                    startIcon={<AddIcon />}
+                    onClick={() => {
+                      setValue(SummaryFieldItem.type, "create");
+                      handleSubmit((data) =>
+                        handleCreateSummary(data as SummaryFieldItemType)
+                      )();
+                    }}
                   >
-                    Complete Summary
+                    要約を作成
                   </Button>
-                </>
-              ) : (
-                <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                  No summary generated yet. Click &ldquo;Create Summary&ldquo;
-                  to generate one.
-                </Typography>
-              )}
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper sx={{ p: 2 }}>
-              <Typography variant="h5" gutterBottom>
-                Summaries
-              </Typography>
-              <List>
-                {summaries.map((summary) => (
-                  <ListItem
-                    key={summary.id}
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="edit"
-                          onClick={() => handleEditSummary(summary)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => handleDeleteSummary(summary.id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary={summary.title}
-                      secondary={
-                        <>
-                          <Typography
-                            variant="body2"
-                            component="span"
-                            display="block"
-                          >
-                            {summary.summary}
-                          </Typography>
-                          {summary.categories.map((category) => (
-                            <Chip
-                              key={category}
-                              label={category}
-                              size="small"
-                              sx={{ mr: 0.5, mb: 0.5 }}
-                            />
-                          ))}
-                          {summary.tags.map((tag) => (
-                            <Chip
-                              key={tag}
-                              label={tag}
-                              size="small"
-                              variant="outlined"
-                              sx={{ mr: 0.5, mb: 0.5 }}
-                            />
-                          ))}
-                        </>
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Grid>
-        </Grid>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {isCreateSummaryPending ? (
+                    <Loading />
+                  ) : (
+                    <>
+                      <TextFieldElement
+                        name={SummaryFieldItem.summary}
+                        multiline
+                        rows={4}
+                        control={control}
+                        sx={{ mb: 2 }}
+                        placeholder="まだ要約が作成されていません.
+                        &ldquo;要約を作成&ldquo;ボタンを押してください。"
+                        error={!!errors.summary}
+                        helperText={errors.summary?.message?.toString()}
+                      />
+                      <Button
+                        variant="contained"
+                        sx={{ alignSelf: "flex-end" }}
+                        onClick={() => {
+                          setValue(SummaryFieldItem.type, "complete");
+                          handleSubmit((data) =>
+                            handleCompleteSummary(data as SummaryFieldItemType)
+                          )();
+                        }}
+                      >
+                        要約を保存
+                      </Button>
+                    </>
+                  )}
+                </Paper>
+              </Grid>
+            </Grid>
+          </FormContainer>
+        )}
       </Container>
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Edit Summary</DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            label="Title"
-            value={currentSummary?.title || ""}
-            onChange={(e) =>
-              setCurrentSummary((prev) =>
-                prev ? { ...prev, title: e.target.value } : null
-              )
-            }
-            sx={{ mb: 2, mt: 1 }}
-          />
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            label="Summary"
-            value={currentSummary?.summary || ""}
-            onChange={(e) =>
-              setCurrentSummary((prev) =>
-                prev ? { ...prev, summary: e.target.value } : null
-              )
-            }
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            label="Categories (comma-separated)"
-            value={currentSummary?.categories.join(", ") || ""}
-            onChange={(e) =>
-              setCurrentSummary((prev) =>
-                prev
-                  ? { ...prev, categories: e.target.value.split(", ") }
-                  : null
-              )
-            }
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            label="Tags (comma-separated)"
-            value={currentSummary?.tags.join(", ") || ""}
-            onChange={(e) =>
-              setCurrentSummary((prev) =>
-                prev ? { ...prev, tags: e.target.value.split(", ") } : null
-              )
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-          <Button onClick={handleSaveSummary} variant="contained">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

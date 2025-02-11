@@ -1,3 +1,4 @@
+"use server";
 import { OpenAICreateSummaryResponse } from "app/lib/types";
 import OpenAI from "openai";
 
@@ -16,15 +17,26 @@ export const openaiCreateSummary = async (
     messages: [
       {
         role: "system",
-        content: `あなたはコンテンツを要約するためのアプリです。\n
-        読み込んだ文章を要約してタグ付け、カテゴライズを実施してください。\n
-        出力フォーマットは 要約、タグ、カテゴリー として、それぞれ1行ずつ出力してください。
-        タグとカテゴリーはカンマ区切りで出力してください。
-        `,
+        content:
+          "あなたは高度な文章要約を行うAIアシスタントです。\n\
+        入力された文章を以下の要件に従って要約し、タグ付け、カテゴライズを行ってください。\n\n\
+        ## 要件\n\
+        1. **要約**: 読み込んだ文章を簡潔に要約してください。要点が明確になるようにしてください。\n\
+        2. **タグ**: 文章の内容を端的に表すキーワードを複数選び、カンマ(,)区切りで出力してください。\n\
+        3. **カテゴリー**: 文章が属するカテゴリ（例: テクノロジー, ビジネス, 健康 など）を複数選び、カンマ(,)区切りで出力してください。\n\n\
+        ## 出力フォーマット\n\
+        ```\n\
+          summary: <要約>,\n\
+          tags: <タグ,タグ,タグ>,\n\
+          categories: <カテゴリー,カテゴリー,カテゴリー>\n\
+        ```\n\n\
+        **注意点**:\n\
+        - タグとカテゴリーは、意味が明確になるように選択してください。\n\
+        - 出力の大部分は日本語で記述してください（特定の固有名詞などを除く）。",
       },
       {
         role: "user",
-        content: `タイトルとコンテンツを読み込んで、要約を作成してください。: タイトル：${title} コンテンツ：${content}`,
+        content: `タイトルとコンテンツを読み込んで、詳細な要約を作成してください。: タイトル：${title} コンテンツ：${content}\n\n`,
       },
     ],
   });
@@ -35,11 +47,19 @@ export const openaiCreateSummary = async (
     throw new Error("AI response is empty");
   }
 
-  console.log(`要約結果：${response.choices[0].message.content}`);
+  console.log(`要約結果：${lines}`);
 
   return {
-    summary: lines[0] || "",
-    tags: lines[1]?.split(",").map((tag) => tag.trim()) || [],
-    categories: lines[2]?.split(",").map((category) => category.trim()) || [],
+    summary: lines[1]?.replace("summary:", "") || "",
+    tags:
+      lines[2]
+        ?.replace("tags:", "")
+        .split(",")
+        .map((tag) => tag.trim()) || [], // タグ:を削除
+    categories:
+      lines[3]
+        ?.replace("categories:", "")
+        .split(",")
+        .map((category) => category.trim()) || [],
   };
 };

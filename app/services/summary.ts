@@ -32,7 +32,7 @@ export class SummaryService {
   ): Promise<Summary> {
     const summary = await prisma.summary.create({
       data: {
-        userId: "1",
+        userId: "dd84e0e5-3134-4758-b53d-d4656834014b",
         title: completeSummaryRequest.title,
         content: completeSummaryRequest.content,
         summary: completeSummaryRequest.summary,
