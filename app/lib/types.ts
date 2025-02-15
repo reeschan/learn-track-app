@@ -56,3 +56,8 @@ type RequestState<T> = T & {
 };
 
 export type SummaryState = RequestState<CompleteSummaryRequest>;
+
+export type Item = {
+  text: string;
+  color: string;
+};

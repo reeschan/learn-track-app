@@ -26,10 +26,11 @@ export const openaiCreateSummary = async (
         3. **カテゴリー**: 文章が属するカテゴリ（例: テクノロジー, ビジネス, 健康 など）を複数選び、カンマ(,)区切りで出力してください。\n\n\
         ## 出力フォーマット\n\
         ```\n\
-          summary: <要約>,\n\
-          tags: <タグ,タグ,タグ>,\n\
-          categories: <カテゴリー,カテゴリー,カテゴリー>\n\
+          summary:<要約>\n\
+          tags:<タグ,タグ,タグ>\n\
+          categories:<カテゴリー,カテゴリー,カテゴリー>\n\
         ```\n\n\
+        要約ができない場合は、summaryはnullを返してください。\n\
         **注意点**:\n\
         - タグとカテゴリーは、意味が明確になるように選択してください。\n\
         - 出力の大部分は日本語で記述してください（特定の固有名詞などを除く）。",
@@ -47,10 +48,15 @@ export const openaiCreateSummary = async (
     throw new Error("AI response is empty");
   }
 
+  const summary = lines[1]?.replace("summary:", "") || "";
+  if (summary === " null" || summary === "null" || summary === "  null") {
+    throw new Error("要約ができませんでした。");
+  }
+
   console.log(`要約結果：${lines}`);
 
   return {
-    summary: lines[1]?.replace("summary:", "") || "",
+    summary,
     tags:
       lines[2]
         ?.replace("tags:", "")
