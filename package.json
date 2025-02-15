@@ -8,7 +8,7 @@
     "start": "next start -p $PORT",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:prod": "DATABASE_URL=$(cat .env.prod | grep DATABASE_URL | cut -d '=' -f2) npx prisma migrate deploy",
-    "generate": "npx prisma generate",
+    "generate": "pnpm prisma generate",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit"

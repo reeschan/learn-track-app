@@ -1,3 +1,3 @@
 web: pnpm start
 
-release: npx prisma migrate deploy
+release: pnpm prisma migrate deploy
