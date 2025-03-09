@@ -37,19 +37,29 @@ export class SummaryService {
         content: completeSummaryRequest.content,
         summary: completeSummaryRequest.summary,
         tags: {
-          create: completeSummaryRequest.tags.map((tagName) => ({
-            tag: {
-              create: { name: tagName },
-            },
-          })),
+          create: await Promise.all(
+            completeSummaryRequest.tags.map(async (tagName) => ({
+              tag: {
+                connectOrCreate: {
+                  where: { name: tagName },
+                  create: { name: tagName }
+                }
+              }
+            }))
+          )
         },
         categories: {
-          create: completeSummaryRequest.categories.map((categoryName) => ({
-            category: {
-              create: { name: categoryName },
-            },
-          })),
-        },
+          create: await Promise.all(
+            completeSummaryRequest.categories.map(async (categoryName) => ({
+              category: {
+                connectOrCreate: {
+                  where: { name: categoryName },
+                  create: { name: categoryName }
+                }
+              }
+            }))
+          )
+        }
       },
     });
 

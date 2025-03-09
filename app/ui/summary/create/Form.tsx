@@ -16,7 +16,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import Loading from "app/ui/common/Loading";
-import router from "next/router";
 import { useItemsManager } from "app/lib/hooks/useTagItem";
 import ItemField from "app/ui/common/Item";
 
@@ -109,8 +108,6 @@ export default function Create() {
       if (response.handleErrors) {
         return;
       }
-      //成功するなら一覧ページに遷移してこのサマリーIDをセットする
-      router.push(`/summary/list/${response.id}`);
     });
   };
 
@@ -192,7 +189,7 @@ export default function Create() {
                   <TextFieldElement
                     name={SummaryFieldItem.summary}
                     multiline
-                    rows={4}
+                    rows={20}
                     control={control}
                     sx={{ mb: 2 }}
                     placeholder="まだ要約が作成されていません.
