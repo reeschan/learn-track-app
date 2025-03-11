@@ -41,6 +41,19 @@ export type Summary = {
   updatedAt: Date;
 };
 
+export type GetAllSummaryRequest = {
+  userId: string;
+};
+
+export type RequestState = {
+  handleErrors: SummaryErrors;
+  message: Message;
+};
+
+export type GetAllSummaryState = {
+  summaries: Summary[];
+} & RequestState;
+
 export type SummaryErrors = string[] | null;
 export type SummaryZodErrors = {
   title?: string[];
@@ -50,12 +63,7 @@ export type SummaryZodErrors = {
 
 export type Message = string | null;
 
-type RequestState<T> = T & {
-  handleErrors: SummaryErrors;
-  message: Message;
-};
-
-export type SummaryState = RequestState<CompleteSummaryRequest>;
+export type SummaryState = CompleteSummaryRequest & RequestState;
 
 export type Item = {
   text: string;

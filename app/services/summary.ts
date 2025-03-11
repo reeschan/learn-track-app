@@ -1,21 +1,72 @@
 import { LogRequestResponse } from "app/decorators/logDecorator";
-import { openaiCreateSummary } from "app/lib/external/openai";
-import { prisma } from "app/lib/prisma";
+import { IPrismaClient } from "app/lib/prisma";
 import {
   CreateSummaryRequest,
   CreateSummaryResponse,
   CompleteSummaryRequest,
   Summary,
+  GetAllSummaryRequest,
 } from "app/lib/types";
+import { IOpenAIService } from "app/lib/external/openai";
+
+export interface ISummaryService {
+  getAllsummary(getAllSummaryRequest: GetAllSummaryRequest): Promise<Summary[]>;
+  createSummary(createSummaryRequest: CreateSummaryRequest): Promise<CreateSummaryResponse>;
+  completeSummary(completeSummaryRequest: CompleteSummaryRequest): Promise<Summary>;
+}
 
 // サマリー作成サービスクラス
-export class SummaryService {
+export class SummaryService implements ISummaryService {
+  constructor(
+    private readonly prisma: IPrismaClient,
+    private readonly openaiService: IOpenAIService
+  ) {}
+
+  @LogRequestResponse
+  async getAllsummary(
+    getAllSummaryRequest: GetAllSummaryRequest
+  ): Promise<Summary[]> {
+    // summaryに紐づくcategoryとtagを取得
+    // categoryとtagはnameだけ取得
+    const summaries = await this.prisma.summary.findMany({
+      where: {
+        userId: getAllSummaryRequest.userId,
+      },
+      include: {
+        categories: {
+          select: {
+            category: {
+              select: {
+                name: true
+              }
+            }
+          }
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
+      },
+    });
+
+    return summaries.map(summary => ({
+      ...summary,
+      categories: summary.categories.map(c => c.category.name),
+      tags: summary.tags.map(t => t.tag.name)
+    }));
+  }
+
   @LogRequestResponse
   async createSummary(
     createSummaryRequest: CreateSummaryRequest
   ): Promise<CreateSummaryResponse> {
     // OpenAIを使用してコンテンツを解析
-    const aiResponse = await openaiCreateSummary(
+    const aiResponse = await this.openaiService.createSummary(
       createSummaryRequest.title,
       createSummaryRequest.content
     );
@@ -30,7 +81,7 @@ export class SummaryService {
   async completeSummary(
     completeSummaryRequest: CompleteSummaryRequest
   ): Promise<Summary> {
-    const summary = await prisma.summary.create({
+    const summary = await this.prisma.summary.create({
       data: {
         userId: "dd84e0e5-3134-4758-b53d-d4656834014b",
         title: completeSummaryRequest.title,

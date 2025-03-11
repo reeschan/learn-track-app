@@ -3,11 +3,15 @@ import {
   CompleteSummaryRequest,
   CompleteSummaryResponse,
   CreateSummaryRequest,
+  GetAllSummaryRequest,
+  GetAllSummaryState,
   SummaryState,
 } from "app/lib/types";
 import { SummaryService } from "app/services/summary";
+import { prisma } from "app/lib/prisma";
+import { openaiService } from "app/lib/external/openai";
 
-const summaryService = new SummaryService();
+const summaryService = new SummaryService(prisma, openaiService);
 
 export const createSummary = async (
   payload: CreateSummaryRequest
@@ -24,6 +28,18 @@ export const createSummary = async (
     handleErrors: null,
     message: "",
   };
+};
+
+export const getAllSummary = async (
+  payload: GetAllSummaryRequest
+): Promise<GetAllSummaryState> => {
+  const response = await summaryService.getAllsummary(payload);
+
+  return {
+    summaries: response,
+    handleErrors: null,
+    message: "",
+  }
 };
 
 export const completeSummary = async (
