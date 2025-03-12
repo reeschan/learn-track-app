@@ -8,10 +8,10 @@ import {
   SummaryState,
 } from "app/lib/types";
 import { SummaryService } from "app/services/summary";
-import { prisma } from "app/lib/prisma";
-import { openaiService } from "app/lib/external/openai";
+import { prismaClient } from "app/lib/prisma";
+import { OpenAIService } from "app/services/external/openai";
 
-const summaryService = new SummaryService(prisma, openaiService);
+const summaryService = new SummaryService(prismaClient, new OpenAIService());
 
 export const createSummary = async (
   payload: CreateSummaryRequest

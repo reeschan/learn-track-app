@@ -1,5 +1,5 @@
 import { LogRequestResponse } from "app/decorators/logDecorator";
-import { IPrismaClient } from "app/lib/prisma";
+import { PrismaClient } from "prisma/generated";
 import {
   CreateSummaryRequest,
   CreateSummaryResponse,
@@ -7,7 +7,7 @@ import {
   Summary,
   GetAllSummaryRequest,
 } from "app/lib/types";
-import { IOpenAIService } from "app/lib/external/openai";
+import { IOpenAIService } from "app/services/external/openai";
 
 export interface ISummaryService {
   getAllsummary(getAllSummaryRequest: GetAllSummaryRequest): Promise<Summary[]>;
@@ -18,7 +18,7 @@ export interface ISummaryService {
 // サマリー作成サービスクラス
 export class SummaryService implements ISummaryService {
   constructor(
-    private readonly prisma: IPrismaClient,
+    private readonly prisma: PrismaClient,
     private readonly openaiService: IOpenAIService
   ) {}
 
