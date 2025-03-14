@@ -13,13 +13,13 @@ const errorMap: ZodErrorMap = (issue, _ctx) => {
     case ZodIssueCode.invalid_literal:
       message = `無効なリテラル値、期待値：${JSON.stringify(
         issue.expected,
-        util.jsonStringifyReplacer
+        util.jsonStringifyReplacer,
       )}`;
       break;
     case ZodIssueCode.unrecognized_keys:
       message = `オブジェクト内で認識されないキー：${util.joinValues(
         issue.keys,
-        ", "
+        ", ",
       )}`;
       break;
     case ZodIssueCode.invalid_union:
@@ -27,12 +27,12 @@ const errorMap: ZodErrorMap = (issue, _ctx) => {
       break;
     case ZodIssueCode.invalid_union_discriminator:
       message = `無効なディスクリミネータ値。期待値：${util.joinValues(
-        issue.options
+        issue.options,
       )}`;
       break;
     case ZodIssueCode.invalid_enum_value:
       message = `無効な列挙値。期待値：${util.joinValues(
-        issue.options
+        issue.options,
       )}、受け取った値：'${issue.received}'`;
       break;
     case ZodIssueCode.invalid_arguments:

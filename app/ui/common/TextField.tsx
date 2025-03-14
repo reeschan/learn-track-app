@@ -1,9 +1,12 @@
-"use client"
+"use client";
 
 import React from "react";
-import { TextField as MuiTextField, TextFieldProps as MuiTextFieldProps } from "@mui/material";
+import {
+  TextField as MuiTextField,
+  TextFieldProps as MuiTextFieldProps,
+} from "@mui/material";
 
-export interface TextFieldProps extends Omit<MuiTextFieldProps, 'variant'> {
+export interface TextFieldProps extends Omit<MuiTextFieldProps, "variant"> {
   id: string;
   name: string;
   label: string;
@@ -11,7 +14,7 @@ export interface TextFieldProps extends Omit<MuiTextFieldProps, 'variant'> {
   required?: boolean;
   error?: boolean;
   helperText?: string;
-  variant?: 'outlined' | 'filled' | 'standard';
+  variant?: "outlined" | "filled" | "standard";
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
@@ -41,4 +44,4 @@ export const TextField: React.FC<TextFieldProps> = ({
   );
 };
 
-export default TextField; 
+export default TextField;

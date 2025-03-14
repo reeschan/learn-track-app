@@ -1,29 +1,37 @@
-import { Button } from "@mui/material"
-import { Google as GoogleIcon, GitHub as GitHubIcon } from "@mui/icons-material"
-import { handleProviderSignIn } from "app/lib/actions"
+import { Button } from "@mui/material";
+import {
+  Google as GoogleIcon,
+  GitHub as GitHubIcon,
+} from "@mui/icons-material";
+import { handleProviderSignIn } from "app/lib/actions";
 
 type ProviderProps = {
   provider: {
-    id: string
-    name: string
-  }
-  callbackUrl: string
-}
+    id: string;
+    name: string;
+  };
+  callbackUrl: string;
+};
 
-export default function ProviderSignInButton({ provider, callbackUrl }: ProviderProps) {
+export default function ProviderSignInButton({
+  provider,
+  callbackUrl,
+}: ProviderProps) {
   const getProviderIcon = (providerId: string) => {
     switch (providerId.toLowerCase()) {
       case "google":
-        return <GoogleIcon />
+        return <GoogleIcon />;
       case "github":
-        return <GitHubIcon />
+        return <GitHubIcon />;
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
-    <form action={async () => await handleProviderSignIn(provider.id, callbackUrl)}>
+    <form
+      action={async () => await handleProviderSignIn(provider.id, callbackUrl)}
+    >
       <Button
         type="submit"
         fullWidth
@@ -39,5 +47,5 @@ export default function ProviderSignInButton({ provider, callbackUrl }: Provider
         Continue with {provider.name}
       </Button>
     </form>
-  )
-} 
+  );
+}

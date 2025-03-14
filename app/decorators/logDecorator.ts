@@ -1,7 +1,7 @@
 export const LogRequestResponse = (
   target: object,
   propertyKey: string,
-  descriptor: PropertyDescriptor
+  descriptor: PropertyDescriptor,
 ) => {
   const originalMethod = descriptor.value;
 

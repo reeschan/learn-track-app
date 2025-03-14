@@ -19,8 +19,5 @@ export const authConfig = {
       return true;
     },
   },
-  providers: [
-    Google,
-    Github,
-  ], 
+  providers: [Google, Github],
 } satisfies NextAuthConfig;

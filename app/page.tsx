@@ -9,8 +9,5 @@ export default function Home() {
   if (!session) {
     redirect("/signin");
   }
-  return (
-    <Suspense fallback={<Loading />}>
-    </Suspense>
-  );
+  return <Suspense fallback={<Loading />}></Suspense>;
 }

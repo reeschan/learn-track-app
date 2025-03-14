@@ -6,7 +6,7 @@ import { authConfig } from "./auth.config";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { User } from "app/lib/types";
-import type { Provider } from "next-auth/providers"
+import type { Provider } from "next-auth/providers";
 import { prisma } from "app/lib/prisma";
 
 async function getUser(email: string): Promise<User | undefined> {
@@ -36,7 +36,7 @@ const providers: Provider[] = [
         if (!user) return null;
         const passwordsMatch = await bcrypt.compare(
           password,
-          user.passwordHash
+          user.passwordHash,
         );
 
         if (passwordsMatch) return user;
@@ -54,19 +54,19 @@ const providers: Provider[] = [
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
   }),
-]
+];
 
 export async function getProviderMap() {
   return providers
     .map((provider) => {
       if (typeof provider === "function") {
-        const providerData = provider()
-        return { id: providerData.id, name: providerData.name }
+        const providerData = provider();
+        return { id: providerData.id, name: providerData.name };
       } else {
-        return { id: provider.id, name: provider.name }
+        return { id: provider.id, name: provider.name };
       }
     })
-    .filter((provider) => provider.id !== "credentials")
+    .filter((provider) => provider.id !== "credentials");
 }
 
 export const { auth, handlers, signIn, signOut } = NextAuth({

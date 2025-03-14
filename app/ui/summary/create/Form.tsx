@@ -106,9 +106,9 @@ export default function Create() {
           categories: categories.map((category) => category.text),
         });
 
-      if (response.handleErrors) {
-        return;
-      }
+        if (response.handleErrors) {
+          return;
+        }
       } catch (error) {
         console.error(error);
       }
@@ -124,11 +124,11 @@ export default function Create() {
       </AppBar>
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         {isCompleteSummaryPending && <Loading />}
-        <FormContainer onSuccess={(data) => console.log(data)} onError={(error) => console.log(error)}>
-          <TextFieldElement
-            name={SummaryFieldItem.type}
-            hidden
-          />
+        <FormContainer
+          onSuccess={(data) => console.log(data)}
+          onError={(error) => console.log(error)}
+        >
+          <TextFieldElement name={SummaryFieldItem.type} hidden />
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Paper sx={{ p: 2, height: "100%" }}>
@@ -170,7 +170,7 @@ export default function Create() {
                   onClick={() => {
                     setValue(SummaryFieldItem.type, "create");
                     handleSubmit((data) =>
-                      handleCreateSummary(data as SummaryFieldItemType)
+                      handleCreateSummary(data as SummaryFieldItemType),
                     )();
                   }}
                 >
@@ -206,7 +206,7 @@ export default function Create() {
                     onClick={() => {
                       setValue(SummaryFieldItem.type, "complete");
                       handleSubmit((data) =>
-                        handleCompleteSummary(data as SummaryFieldItemType)
+                        handleCompleteSummary(data as SummaryFieldItemType),
                       )();
                     }}
                   >

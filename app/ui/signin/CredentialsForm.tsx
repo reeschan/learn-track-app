@@ -1,24 +1,29 @@
-"use client"
-import { useState } from "react"
+"use client";
+import { useState } from "react";
 import {
   Box,
   TextField,
   Button,
   InputAdornment,
   IconButton,
-} from "@mui/material"
+} from "@mui/material";
 import {
   Mail as MailIcon,
   Lock as LockIcon,
   Visibility,
   VisibilityOff,
-} from "@mui/icons-material"
+} from "@mui/icons-material";
 
 export default function CredentialsForm() {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <Box component="form" action="/api/auth/callback/credentials" method="post" sx={{ width: "100%" }}>
+    <Box
+      component="form"
+      action="/api/auth/callback/credentials"
+      method="post"
+      sx={{ width: "100%" }}
+    >
       <TextField
         margin="normal"
         required
@@ -84,5 +89,5 @@ export default function CredentialsForm() {
         Log In
       </Button>
     </Box>
-  )
-} 
+  );
+}

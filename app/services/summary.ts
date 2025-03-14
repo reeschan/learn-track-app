@@ -11,20 +11,24 @@ import { IOpenAIService } from "app/services/external/openai";
 
 export interface ISummaryService {
   getAllsummary(getAllSummaryRequest: GetAllSummaryRequest): Promise<Summary[]>;
-  createSummary(createSummaryRequest: CreateSummaryRequest): Promise<CreateSummaryResponse>;
-  completeSummary(completeSummaryRequest: CompleteSummaryRequest): Promise<Summary>;
+  createSummary(
+    createSummaryRequest: CreateSummaryRequest,
+  ): Promise<CreateSummaryResponse>;
+  completeSummary(
+    completeSummaryRequest: CompleteSummaryRequest,
+  ): Promise<Summary>;
 }
 
 // サマリー作成サービスクラス
 export class SummaryService implements ISummaryService {
   constructor(
     private readonly prisma: PrismaClient,
-    private readonly openaiService: IOpenAIService
+    private readonly openaiService: IOpenAIService,
   ) {}
 
   @LogRequestResponse
   async getAllsummary(
-    getAllSummaryRequest: GetAllSummaryRequest
+    getAllSummaryRequest: GetAllSummaryRequest,
   ): Promise<Summary[]> {
     // summaryに紐づくcategoryとtagを取得
     // categoryとtagはnameだけ取得
@@ -37,38 +41,38 @@ export class SummaryService implements ISummaryService {
           select: {
             category: {
               select: {
-                name: true
-              }
-            }
-          }
+                name: true,
+              },
+            },
+          },
         },
         tags: {
           select: {
             tag: {
               select: {
-                name: true
-              }
-            }
-          }
-        }
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
-    return summaries.map(summary => ({
+    return summaries.map((summary) => ({
       ...summary,
-      categories: summary.categories.map(c => c.category.name),
-      tags: summary.tags.map(t => t.tag.name)
+      categories: summary.categories.map((c) => c.category.name),
+      tags: summary.tags.map((t) => t.tag.name),
     }));
   }
 
   @LogRequestResponse
   async createSummary(
-    createSummaryRequest: CreateSummaryRequest
+    createSummaryRequest: CreateSummaryRequest,
   ): Promise<CreateSummaryResponse> {
     // OpenAIを使用してコンテンツを解析
     const aiResponse = await this.openaiService.createSummary(
       createSummaryRequest.title,
-      createSummaryRequest.content
+      createSummaryRequest.content,
     );
 
     return {
@@ -79,7 +83,7 @@ export class SummaryService implements ISummaryService {
 
   @LogRequestResponse
   async completeSummary(
-    completeSummaryRequest: CompleteSummaryRequest
+    completeSummaryRequest: CompleteSummaryRequest,
   ): Promise<Summary> {
     const summary = await this.prisma.summary.create({
       data: {
@@ -93,11 +97,11 @@ export class SummaryService implements ISummaryService {
               tag: {
                 connectOrCreate: {
                   where: { name: tagName },
-                  create: { name: tagName }
-                }
-              }
-            }))
-          )
+                  create: { name: tagName },
+                },
+              },
+            })),
+          ),
         },
         categories: {
           create: await Promise.all(
@@ -105,12 +109,12 @@ export class SummaryService implements ISummaryService {
               category: {
                 connectOrCreate: {
                   where: { name: categoryName },
-                  create: { name: categoryName }
-                }
-              }
-            }))
-          )
-        }
+                  create: { name: categoryName },
+                },
+              },
+            })),
+          ),
+        },
       },
     });
 

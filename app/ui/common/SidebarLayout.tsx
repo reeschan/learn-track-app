@@ -14,14 +14,14 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
-  CssBaseline 
+  CssBaseline,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   Dashboard as DashboardIcon,
   Description as DocumentIcon,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
 } from "@mui/icons-material";
 import { useState } from "react";
 
@@ -32,9 +32,9 @@ interface SidebarLayoutProps {
   title?: string;
 }
 
-export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ 
-  children, 
-  title = "アプリケーション" 
+export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
+  children,
+  title = "アプリケーション",
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -52,12 +52,14 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
 
   const drawer = (
     <>
-      <Toolbar sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'flex-end', 
-        px: [1] 
-      }}>
+      <Toolbar
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          px: [1],
+        }}
+      >
         <IconButton onClick={handleDrawerToggle}>
           <ChevronLeftIcon />
         </IconButton>
@@ -77,20 +79,20 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          transition: theme.transitions.create(['width', 'margin'], {
+          transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
           ...(open && {
             marginLeft: drawerWidth,
             width: `calc(100% - ${drawerWidth}px)`,
-            transition: theme.transitions.create(['width', 'margin'], {
+            transition: theme.transitions.create(["width", "margin"], {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen,
             }),
@@ -105,7 +107,7 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
             edge="start"
             sx={{
               marginRight: 5,
-              ...(open && { display: 'none' }),
+              ...(open && { display: "none" }),
             }}
           >
             <MenuIcon />
@@ -115,7 +117,7 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
           </Typography>
         </Toolbar>
       </AppBar>
-      
+
       <Drawer
         variant={isMobile ? "temporary" : "persistent"}
         open={open}
@@ -123,15 +125,15 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { 
-            width: drawerWidth, 
-            boxSizing: 'border-box' 
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: "border-box",
           },
         }}
       >
         {drawer}
       </Drawer>
-      
+
       <Box
         component="main"
         sx={{
@@ -139,7 +141,7 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
           p: 3,
           width: { sm: `calc(100% - ${open ? drawerWidth : 0}px)` },
           ml: { sm: open ? `${drawerWidth}px` : 0 },
-          transition: theme.transitions.create(['margin', 'width'], {
+          transition: theme.transitions.create(["margin", "width"], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),

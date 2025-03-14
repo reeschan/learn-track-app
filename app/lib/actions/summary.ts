@@ -15,7 +15,7 @@ import { auth } from "auth";
 const summaryService = new SummaryService(prisma, new OpenAIService());
 
 export const createSummary = async (
-  payload: CreateSummaryRequest
+  payload: CreateSummaryRequest,
 ): Promise<SummaryState> => {
   const response = await summaryService.createSummary(payload);
   const session = await auth();
@@ -26,7 +26,7 @@ export const createSummary = async (
     summary: response.summary,
     tags: Array.from(new Set(payload.tags.concat(response.tags))),
     categories: Array.from(
-      new Set(payload.categories.concat(response.categories))
+      new Set(payload.categories.concat(response.categories)),
     ),
     handleErrors: null,
     message: "",
@@ -34,7 +34,7 @@ export const createSummary = async (
 };
 
 export const getAllSummary = async (
-  payload: GetAllSummaryRequest
+  payload: GetAllSummaryRequest,
 ): Promise<GetAllSummaryState> => {
   const response = await summaryService.getAllsummary(payload);
 
@@ -42,11 +42,11 @@ export const getAllSummary = async (
     summaries: response,
     handleErrors: null,
     message: "",
-  }
+  };
 };
 
 export const completeSummary = async (
-  payload: CompleteSummaryRequest
+  payload: CompleteSummaryRequest,
 ): Promise<CompleteSummaryResponse> => {
   const session = await auth();
   try {

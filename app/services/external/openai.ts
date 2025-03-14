@@ -2,7 +2,10 @@ import { OpenAICreateSummaryResponse } from "app/lib/types";
 import OpenAI from "openai";
 
 export interface IOpenAIService {
-  createSummary(title: string, content: string): Promise<OpenAICreateSummaryResponse>;
+  createSummary(
+    title: string,
+    content: string,
+  ): Promise<OpenAICreateSummaryResponse>;
 }
 
 export class OpenAIService implements IOpenAIService {
@@ -11,12 +14,12 @@ export class OpenAIService implements IOpenAIService {
   constructor() {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
-    })
+    });
   }
 
   async createSummary(
     title: string,
-    content: string
+    content: string,
   ): Promise<OpenAICreateSummaryResponse> {
     console.log(`要約するタイトル：${title} コンテンツ：${content}`);
 
@@ -28,11 +31,12 @@ export class OpenAIService implements IOpenAIService {
           content:
             "あなたは高度な文章要約を行うAIアシスタントです。\n\
             入力された文章を以下の要件に従って要約し、タグ付け、カテゴライズを行ってください。\n\n\
-            "
+            ",
         },
         {
           role: "user",
-          content: `タイトルとコンテンツを読み込んで、詳細な要約を作成してください。: タイトル：${title} コンテンツ：${content}\n\n` +
+          content:
+            `タイトルとコンテンツを読み込んで、詳細な要約を作成してください。: タイトル：${title} コンテンツ：${content}\n\n` +
             "## 要件\n\
             1. **要約**: 読み込んだ文章を簡潔に要約してください。要点が明確になるようにしてください。\n\
             2. **タグ**: 文章の内容を端的に表すキーワードを複数選び、カンマ(,)区切りで出力してください。\n\
