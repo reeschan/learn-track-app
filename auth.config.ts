@@ -1,8 +1,12 @@
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "app/lib/prisma";
 import { NextAuthConfig } from "next-auth";
-import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 
 export const authConfig = {
+  debug: process.env.NODE_ENV === "development",
+  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/signin",
   },
