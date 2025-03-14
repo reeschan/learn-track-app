@@ -23,6 +23,7 @@ export type CreateSummaryResponse = CreateSummaryRequest &
   OpenAICreateSummaryResponse;
 
 export type CompleteSummaryRequest = CreateSummaryRequest & {
+  userId: string;
   summary: string;
 };
 
