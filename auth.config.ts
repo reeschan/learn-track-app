@@ -7,21 +7,9 @@ import Google from "next-auth/providers/google";
 export const authConfig = {
   debug: process.env.NODE_ENV === "development",
   adapter: PrismaAdapter(prisma),
+  secret: process.env.AUTH_SECRET,
   pages: {
     signIn: "/signin",
-  },
-  callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isTopPage = nextUrl.pathname === "/";
-      if (isLoggedIn && isTopPage) {
-        return Response.redirect(new URL("/summary", nextUrl));
-      }
-      if (!isLoggedIn) {
-        return false;
-      }
-      return true;
-    },
   },
   providers: [Google, Github],
 } satisfies NextAuthConfig;

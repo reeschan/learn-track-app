@@ -17,7 +17,7 @@ export async function handleCredentialsSignIn(formData: FormData) {
 
 export async function handleProviderSignIn(
   providerId: string,
-  callbackUrl = "",
+  callbackUrl = ""
 ) {
   try {
     await signIn(providerId, {

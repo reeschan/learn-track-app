@@ -1,13 +1,13 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import GithubProvider from "next-auth/providers/github";
-import { authConfig } from "./auth.config";
-import { z } from "zod";
-import bcrypt from "bcryptjs";
-import { User } from "app/lib/types";
-import type { Provider } from "next-auth/providers";
 import { prisma } from "app/lib/prisma";
+import { User } from "app/lib/types";
+import bcrypt from "bcryptjs";
+import NextAuth from "next-auth";
+import type { Provider } from "next-auth/providers";
+import Credentials from "next-auth/providers/credentials";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import { z } from "zod";
+import { authConfig } from "./auth.config";
 
 async function getUser(email: string): Promise<User | undefined> {
   try {
@@ -36,7 +36,7 @@ const providers: Provider[] = [
         if (!user) return null;
         const passwordsMatch = await bcrypt.compare(
           password,
-          user.passwordHash,
+          user.passwordHash
         );
 
         if (passwordsMatch) return user;

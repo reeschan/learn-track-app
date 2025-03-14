@@ -1,8 +1,8 @@
-import { Button } from "@mui/material";
 import {
-  Google as GoogleIcon,
   GitHub as GitHubIcon,
+  Google as GoogleIcon,
 } from "@mui/icons-material";
+import { Button } from "@mui/material";
 import { handleProviderSignIn } from "app/lib/actions";
 
 type ProviderProps = {
