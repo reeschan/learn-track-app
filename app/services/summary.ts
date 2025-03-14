@@ -1,5 +1,5 @@
 import { LogRequestResponse } from "app/decorators/logDecorator";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "prisma/generated";
 import {
   CreateSummaryRequest,
   CreateSummaryResponse,
