@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import { LogRequestResponse } from "app/decorators/logDecorator";
 import {
   CompleteSummaryRequest,
@@ -8,7 +9,6 @@ import {
 } from "app/lib/types";
 import { IOpenAIService } from "app/services/external/openai";
 import { auth } from "auth";
-import { PrismaClient } from "prisma/generated";
 
 export interface ISummaryService {
   getAllsummary(getAllSummaryRequest: GetAllSummaryRequest): Promise<Summary[]>;

@@ -1,16 +1,21 @@
-import { getProviderMap } from "auth";
 import SignInForm from "app/ui/signin/SignInForm";
+import { getProviderMap } from "auth";
+import { NextSegmentPage } from "next";
 
-export default async function SignInPage(props: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const searchParams = await props.searchParams;
-
+const SignInPage: NextSegmentPage<{
+  params: {
+    callbackUrl: string;
+    error: string;
+  };
+}> = async ({ params }) => {
+  const { callbackUrl, error } = await params;
   return (
     <SignInForm
       providers={await getProviderMap()}
-      error={searchParams?.error as string | undefined}
-      callbackUrl={searchParams?.callbackUrl as string}
+      error={error}
+      callbackUrl={callbackUrl}
     />
   );
-}
+};
+
+export default SignInPage;

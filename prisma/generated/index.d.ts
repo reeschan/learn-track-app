@@ -14547,8 +14547,8 @@ export namespace Prisma {
     AND?: SummaryWhereInput | SummaryWhereInput[]
     OR?: SummaryWhereInput[]
     NOT?: SummaryWhereInput | SummaryWhereInput[]
-    id?: UuidFilter<"Summary"> | string
-    userId?: UuidFilter<"Summary"> | string
+    id?: StringFilter<"Summary"> | string
+    userId?: StringFilter<"Summary"> | string
     title?: StringFilter<"Summary"> | string
     content?: StringFilter<"Summary"> | string
     summary?: StringFilter<"Summary"> | string
@@ -14577,7 +14577,7 @@ export namespace Prisma {
     AND?: SummaryWhereInput | SummaryWhereInput[]
     OR?: SummaryWhereInput[]
     NOT?: SummaryWhereInput | SummaryWhereInput[]
-    userId?: UuidFilter<"Summary"> | string
+    userId?: StringFilter<"Summary"> | string
     title?: StringFilter<"Summary"> | string
     content?: StringFilter<"Summary"> | string
     summary?: StringFilter<"Summary"> | string
@@ -14605,8 +14605,8 @@ export namespace Prisma {
     AND?: SummaryScalarWhereWithAggregatesInput | SummaryScalarWhereWithAggregatesInput[]
     OR?: SummaryScalarWhereWithAggregatesInput[]
     NOT?: SummaryScalarWhereWithAggregatesInput | SummaryScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"Summary"> | string
-    userId?: UuidWithAggregatesFilter<"Summary"> | string
+    id?: StringWithAggregatesFilter<"Summary"> | string
+    userId?: StringWithAggregatesFilter<"Summary"> | string
     title?: StringWithAggregatesFilter<"Summary"> | string
     content?: StringWithAggregatesFilter<"Summary"> | string
     summary?: StringWithAggregatesFilter<"Summary"> | string
@@ -14618,7 +14618,7 @@ export namespace Prisma {
     AND?: TagWhereInput | TagWhereInput[]
     OR?: TagWhereInput[]
     NOT?: TagWhereInput | TagWhereInput[]
-    id?: UuidFilter<"Tag"> | string
+    id?: StringFilter<"Tag"> | string
     name?: StringFilter<"Tag"> | string
     createdAt?: DateTimeFilter<"Tag"> | Date | string
     summaryTags?: SummaryTagListRelationFilter
@@ -14654,7 +14654,7 @@ export namespace Prisma {
     AND?: TagScalarWhereWithAggregatesInput | TagScalarWhereWithAggregatesInput[]
     OR?: TagScalarWhereWithAggregatesInput[]
     NOT?: TagScalarWhereWithAggregatesInput | TagScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"Tag"> | string
+    id?: StringWithAggregatesFilter<"Tag"> | string
     name?: StringWithAggregatesFilter<"Tag"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Tag"> | Date | string
   }
@@ -14663,8 +14663,8 @@ export namespace Prisma {
     AND?: SummaryTagWhereInput | SummaryTagWhereInput[]
     OR?: SummaryTagWhereInput[]
     NOT?: SummaryTagWhereInput | SummaryTagWhereInput[]
-    summaryId?: UuidFilter<"SummaryTag"> | string
-    tagId?: UuidFilter<"SummaryTag"> | string
+    summaryId?: StringFilter<"SummaryTag"> | string
+    tagId?: StringFilter<"SummaryTag"> | string
     createdAt?: DateTimeFilter<"SummaryTag"> | Date | string
     summary?: XOR<SummaryScalarRelationFilter, SummaryWhereInput>
     tag?: XOR<TagScalarRelationFilter, TagWhereInput>
@@ -14683,8 +14683,8 @@ export namespace Prisma {
     AND?: SummaryTagWhereInput | SummaryTagWhereInput[]
     OR?: SummaryTagWhereInput[]
     NOT?: SummaryTagWhereInput | SummaryTagWhereInput[]
-    summaryId?: UuidFilter<"SummaryTag"> | string
-    tagId?: UuidFilter<"SummaryTag"> | string
+    summaryId?: StringFilter<"SummaryTag"> | string
+    tagId?: StringFilter<"SummaryTag"> | string
     createdAt?: DateTimeFilter<"SummaryTag"> | Date | string
     summary?: XOR<SummaryScalarRelationFilter, SummaryWhereInput>
     tag?: XOR<TagScalarRelationFilter, TagWhereInput>
@@ -14703,8 +14703,8 @@ export namespace Prisma {
     AND?: SummaryTagScalarWhereWithAggregatesInput | SummaryTagScalarWhereWithAggregatesInput[]
     OR?: SummaryTagScalarWhereWithAggregatesInput[]
     NOT?: SummaryTagScalarWhereWithAggregatesInput | SummaryTagScalarWhereWithAggregatesInput[]
-    summaryId?: UuidWithAggregatesFilter<"SummaryTag"> | string
-    tagId?: UuidWithAggregatesFilter<"SummaryTag"> | string
+    summaryId?: StringWithAggregatesFilter<"SummaryTag"> | string
+    tagId?: StringWithAggregatesFilter<"SummaryTag"> | string
     createdAt?: DateTimeWithAggregatesFilter<"SummaryTag"> | Date | string
   }
 
@@ -14712,7 +14712,7 @@ export namespace Prisma {
     AND?: CategoryWhereInput | CategoryWhereInput[]
     OR?: CategoryWhereInput[]
     NOT?: CategoryWhereInput | CategoryWhereInput[]
-    id?: UuidFilter<"Category"> | string
+    id?: StringFilter<"Category"> | string
     name?: StringFilter<"Category"> | string
     createdAt?: DateTimeFilter<"Category"> | Date | string
     summaryCategories?: SummaryCategoryListRelationFilter
@@ -14748,7 +14748,7 @@ export namespace Prisma {
     AND?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
     OR?: CategoryScalarWhereWithAggregatesInput[]
     NOT?: CategoryScalarWhereWithAggregatesInput | CategoryScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"Category"> | string
+    id?: StringWithAggregatesFilter<"Category"> | string
     name?: StringWithAggregatesFilter<"Category"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
   }
@@ -14757,8 +14757,8 @@ export namespace Prisma {
     AND?: SummaryCategoryWhereInput | SummaryCategoryWhereInput[]
     OR?: SummaryCategoryWhereInput[]
     NOT?: SummaryCategoryWhereInput | SummaryCategoryWhereInput[]
-    summaryId?: UuidFilter<"SummaryCategory"> | string
-    categoryId?: UuidFilter<"SummaryCategory"> | string
+    summaryId?: StringFilter<"SummaryCategory"> | string
+    categoryId?: StringFilter<"SummaryCategory"> | string
     createdAt?: DateTimeFilter<"SummaryCategory"> | Date | string
     summary?: XOR<SummaryScalarRelationFilter, SummaryWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
@@ -14777,8 +14777,8 @@ export namespace Prisma {
     AND?: SummaryCategoryWhereInput | SummaryCategoryWhereInput[]
     OR?: SummaryCategoryWhereInput[]
     NOT?: SummaryCategoryWhereInput | SummaryCategoryWhereInput[]
-    summaryId?: UuidFilter<"SummaryCategory"> | string
-    categoryId?: UuidFilter<"SummaryCategory"> | string
+    summaryId?: StringFilter<"SummaryCategory"> | string
+    categoryId?: StringFilter<"SummaryCategory"> | string
     createdAt?: DateTimeFilter<"SummaryCategory"> | Date | string
     summary?: XOR<SummaryScalarRelationFilter, SummaryWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
@@ -14797,8 +14797,8 @@ export namespace Prisma {
     AND?: SummaryCategoryScalarWhereWithAggregatesInput | SummaryCategoryScalarWhereWithAggregatesInput[]
     OR?: SummaryCategoryScalarWhereWithAggregatesInput[]
     NOT?: SummaryCategoryScalarWhereWithAggregatesInput | SummaryCategoryScalarWhereWithAggregatesInput[]
-    summaryId?: UuidWithAggregatesFilter<"SummaryCategory"> | string
-    categoryId?: UuidWithAggregatesFilter<"SummaryCategory"> | string
+    summaryId?: StringWithAggregatesFilter<"SummaryCategory"> | string
+    categoryId?: StringWithAggregatesFilter<"SummaryCategory"> | string
     createdAt?: DateTimeWithAggregatesFilter<"SummaryCategory"> | Date | string
   }
 
@@ -14806,8 +14806,8 @@ export namespace Prisma {
     AND?: ChatGPTHistoryWhereInput | ChatGPTHistoryWhereInput[]
     OR?: ChatGPTHistoryWhereInput[]
     NOT?: ChatGPTHistoryWhereInput | ChatGPTHistoryWhereInput[]
-    id?: UuidFilter<"ChatGPTHistory"> | string
-    userId?: UuidFilter<"ChatGPTHistory"> | string
+    id?: StringFilter<"ChatGPTHistory"> | string
+    userId?: StringFilter<"ChatGPTHistory"> | string
     title?: StringFilter<"ChatGPTHistory"> | string
     content?: StringFilter<"ChatGPTHistory"> | string
     summary?: StringFilter<"ChatGPTHistory"> | string
@@ -14832,7 +14832,7 @@ export namespace Prisma {
     AND?: ChatGPTHistoryWhereInput | ChatGPTHistoryWhereInput[]
     OR?: ChatGPTHistoryWhereInput[]
     NOT?: ChatGPTHistoryWhereInput | ChatGPTHistoryWhereInput[]
-    userId?: UuidFilter<"ChatGPTHistory"> | string
+    userId?: StringFilter<"ChatGPTHistory"> | string
     title?: StringFilter<"ChatGPTHistory"> | string
     content?: StringFilter<"ChatGPTHistory"> | string
     summary?: StringFilter<"ChatGPTHistory"> | string
@@ -14858,8 +14858,8 @@ export namespace Prisma {
     AND?: ChatGPTHistoryScalarWhereWithAggregatesInput | ChatGPTHistoryScalarWhereWithAggregatesInput[]
     OR?: ChatGPTHistoryScalarWhereWithAggregatesInput[]
     NOT?: ChatGPTHistoryScalarWhereWithAggregatesInput | ChatGPTHistoryScalarWhereWithAggregatesInput[]
-    id?: UuidWithAggregatesFilter<"ChatGPTHistory"> | string
-    userId?: UuidWithAggregatesFilter<"ChatGPTHistory"> | string
+    id?: StringWithAggregatesFilter<"ChatGPTHistory"> | string
+    userId?: StringWithAggregatesFilter<"ChatGPTHistory"> | string
     title?: StringWithAggregatesFilter<"ChatGPTHistory"> | string
     content?: StringWithAggregatesFilter<"ChatGPTHistory"> | string
     summary?: StringWithAggregatesFilter<"ChatGPTHistory"> | string
@@ -16016,18 +16016,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type UuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidFilter<$PrismaModel> | string
-  }
-
   export type SummaryTagListRelationFilter = {
     every?: SummaryTagWhereInput
     some?: SummaryTagWhereInput
@@ -16076,21 +16064,6 @@ export namespace Prisma {
     summary?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type UuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type TagCountOrderByAggregateInput = {
@@ -16961,31 +16934,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedUuidFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidFilter<$PrismaModel> | string
-  }
-
-  export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
-  }
-
   export type AccountCreateWithoutUserInput = {
     type: string
     provider: string
@@ -17252,8 +17200,8 @@ export namespace Prisma {
     AND?: SummaryScalarWhereInput | SummaryScalarWhereInput[]
     OR?: SummaryScalarWhereInput[]
     NOT?: SummaryScalarWhereInput | SummaryScalarWhereInput[]
-    id?: UuidFilter<"Summary"> | string
-    userId?: UuidFilter<"Summary"> | string
+    id?: StringFilter<"Summary"> | string
+    userId?: StringFilter<"Summary"> | string
     title?: StringFilter<"Summary"> | string
     content?: StringFilter<"Summary"> | string
     summary?: StringFilter<"Summary"> | string
@@ -17281,8 +17229,8 @@ export namespace Prisma {
     AND?: ChatGPTHistoryScalarWhereInput | ChatGPTHistoryScalarWhereInput[]
     OR?: ChatGPTHistoryScalarWhereInput[]
     NOT?: ChatGPTHistoryScalarWhereInput | ChatGPTHistoryScalarWhereInput[]
-    id?: UuidFilter<"ChatGPTHistory"> | string
-    userId?: UuidFilter<"ChatGPTHistory"> | string
+    id?: StringFilter<"ChatGPTHistory"> | string
+    userId?: StringFilter<"ChatGPTHistory"> | string
     title?: StringFilter<"ChatGPTHistory"> | string
     content?: StringFilter<"ChatGPTHistory"> | string
     summary?: StringFilter<"ChatGPTHistory"> | string
@@ -17686,8 +17634,8 @@ export namespace Prisma {
     AND?: SummaryTagScalarWhereInput | SummaryTagScalarWhereInput[]
     OR?: SummaryTagScalarWhereInput[]
     NOT?: SummaryTagScalarWhereInput | SummaryTagScalarWhereInput[]
-    summaryId?: UuidFilter<"SummaryTag"> | string
-    tagId?: UuidFilter<"SummaryTag"> | string
+    summaryId?: StringFilter<"SummaryTag"> | string
+    tagId?: StringFilter<"SummaryTag"> | string
     createdAt?: DateTimeFilter<"SummaryTag"> | Date | string
   }
 
@@ -17711,8 +17659,8 @@ export namespace Prisma {
     AND?: SummaryCategoryScalarWhereInput | SummaryCategoryScalarWhereInput[]
     OR?: SummaryCategoryScalarWhereInput[]
     NOT?: SummaryCategoryScalarWhereInput | SummaryCategoryScalarWhereInput[]
-    summaryId?: UuidFilter<"SummaryCategory"> | string
-    categoryId?: UuidFilter<"SummaryCategory"> | string
+    summaryId?: StringFilter<"SummaryCategory"> | string
+    categoryId?: StringFilter<"SummaryCategory"> | string
     createdAt?: DateTimeFilter<"SummaryCategory"> | Date | string
   }
 

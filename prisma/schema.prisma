@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated"
 }
 
 datasource db {
@@ -93,8 +92,8 @@ model Authenticator {
 }
 
 model Summary {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @db.Uuid
+  id        String   @id @default(cuid())
+  userId    String
   title     String
   content   String
   summary   String
@@ -107,7 +106,7 @@ model Summary {
 }
 
 model Tag {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
 
@@ -115,8 +114,8 @@ model Tag {
 }
 
 model SummaryTag {
-  summaryId String   @db.Uuid
-  tagId     String   @db.Uuid
+  summaryId String
+  tagId     String
   createdAt DateTime @default(now())
 
   summary Summary @relation(fields: [summaryId], references: [id])
@@ -126,7 +125,7 @@ model SummaryTag {
 }
 
 model Category {
-  id        String   @id @default(uuid()) @db.Uuid
+  id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
 
@@ -134,8 +133,8 @@ model Category {
 }
 
 model SummaryCategory {
-  summaryId  String   @db.Uuid
-  categoryId String   @db.Uuid
+  summaryId  String
+  categoryId String
   createdAt  DateTime @default(now())
 
   summary  Summary  @relation(fields: [summaryId], references: [id])
@@ -145,8 +144,8 @@ model SummaryCategory {
 }
 
 model ChatGPTHistory {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @db.Uuid
+  id        String   @id @default(cuid())
+  userId    String
   title     String
   content   String
   summary   String
