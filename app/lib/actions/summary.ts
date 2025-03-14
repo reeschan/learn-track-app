@@ -8,10 +8,10 @@ import {
   SummaryState,
 } from "app/lib/types";
 import { SummaryService } from "app/services/summary";
-import { prismaClient } from "app/lib/prisma";
+import { prisma } from "app/lib/prisma";
 import { OpenAIService } from "app/services/external/openai";
 
-const summaryService = new SummaryService(prismaClient, new OpenAIService());
+const summaryService = new SummaryService(prisma, new OpenAIService());
 
 export const createSummary = async (
   payload: CreateSummaryRequest
@@ -45,11 +45,16 @@ export const getAllSummary = async (
 export const completeSummary = async (
   payload: CompleteSummaryRequest
 ): Promise<CompleteSummaryResponse> => {
-  const response = await summaryService.completeSummary(payload);
+  try {
+    const response = await summaryService.completeSummary(payload);
 
-  return {
-    ...response,
-    handleErrors: null,
-    message: "",
-  };
+    return {
+      ...response,
+      handleErrors: null,
+      message: "",
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };

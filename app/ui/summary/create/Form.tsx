@@ -16,7 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormContainer, TextFieldElement } from "react-hook-form-mui";
 import Loading from "app/ui/common/Loading";
-import { useItemsManager } from "app/lib/hooks/useTagItem";
+import { useItemsManager } from "app/hooks/useTagItem";
 import ItemField from "app/ui/common/Item";
 
 type SummaryFormSchemaType = {
@@ -99,14 +99,18 @@ export default function Create() {
   const handleCompleteSummary = (payload: SummaryFieldItemType) => {
     setValue(SummaryFieldItem.type, "complete");
     startCompleteSummaryTransition(async () => {
-      const response = await completeSummary({
-        ...payload,
-        tags: tags.map((tag) => tag.text),
-        categories: categories.map((category) => category.text),
-      });
+      try {
+        const response = await completeSummary({
+          ...payload,
+          tags: tags.map((tag) => tag.text),
+          categories: categories.map((category) => category.text),
+        });
 
       if (response.handleErrors) {
         return;
+      }
+      } catch (error) {
+        console.error(error);
       }
     });
   };
@@ -120,10 +124,9 @@ export default function Create() {
       </AppBar>
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         {isCompleteSummaryPending && <Loading />}
-        <FormContainer onSuccess={(data) => console.log(data)}>
+        <FormContainer onSuccess={(data) => console.log(data)} onError={(error) => console.log(error)}>
           <TextFieldElement
             name={SummaryFieldItem.type}
-            defaultValue="create"
             hidden
           />
           <Grid container spacing={3}>

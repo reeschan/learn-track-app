@@ -1,9 +1,0 @@
-import type { Prisma } from '../..';
-
-import { z } from 'zod';
-
-export const NullableDateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableDateTimeFieldUpdateOperationsInput> = z.object({
-  set: z.coerce.date().optional().nullable()
-}).strict() as z.ZodType<Prisma.NullableDateTimeFieldUpdateOperationsInput>;
-
-export default NullableDateTimeFieldUpdateOperationsInputSchema;

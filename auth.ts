@@ -1,17 +1,17 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
 import { authConfig } from "./auth.config";
 import { z } from "zod";
-import { PrismaClient } from "prisma/generated";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { User } from "app/lib/types";
-
-const prismaClient = new PrismaClient();
+import type { Provider } from "next-auth/providers"
+import { prisma } from "app/lib/prisma";
 
 async function getUser(email: string): Promise<User | undefined> {
   try {
-    const user = await prismaClient.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
@@ -23,34 +23,53 @@ async function getUser(email: string): Promise<User | undefined> {
   }
 }
 
-export const { auth, signIn, signOut } = NextAuth({
+const providers: Provider[] = [
+  Credentials({
+    async authorize(credentials) {
+      const parsedCredentials = z
+        .object({ email: z.string().email(), password: z.string().min(6) })
+        .safeParse(credentials);
+
+      if (parsedCredentials.success) {
+        const { email, password } = parsedCredentials.data;
+        const user = await getUser(email);
+        if (!user) return null;
+        const passwordsMatch = await bcrypt.compare(
+          password,
+          user.passwordHash
+        );
+
+        if (passwordsMatch) return user;
+      }
+
+      console.log("Invalid credentials");
+      return null;
+    },
+  }),
+  GoogleProvider({
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  }),
+  GithubProvider({
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  }),
+]
+
+export async function getProviderMap() {
+  return providers
+    .map((provider) => {
+      if (typeof provider === "function") {
+        const providerData = provider()
+        return { id: providerData.id, name: providerData.name }
+      } else {
+        return { id: provider.id, name: provider.name }
+      }
+    })
+    .filter((provider) => provider.id !== "credentials")
+}
+
+export const { auth, handlers, signIn, signOut } = NextAuth({
   ...authConfig,
-  providers: [
-    Credentials({
-      async authorize(credentials) {
-        const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
-          .safeParse(credentials);
-
-        if (parsedCredentials.success) {
-          const { email, password } = parsedCredentials.data;
-          const user = await getUser(email);
-          if (!user) return null;
-          const passwordsMatch = await bcrypt.compare(
-            password,
-            user.passwordHash
-          );
-
-          if (passwordsMatch) return user;
-        }
-
-        console.log("Invalid credentials");
-        return null;
-      },
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-  ],
+  providers: providers,
 });
