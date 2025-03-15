@@ -1,5 +1,5 @@
 "use client";
-import Form from "app/ui/summary/create/Form";
+import Form from "components/ui/summary/create/Form";
 
 export default function Home() {
   return <Form />;

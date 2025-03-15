@@ -1,11 +1,11 @@
-import { prisma } from "app/lib/prisma";
-import { User } from "app/lib/types";
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import type { Provider } from "next-auth/providers";
 import Credentials from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import { prisma } from "server/lib/prisma";
+import { User } from "server/lib/types";
 import { z } from "zod";
 import { authConfig } from "./auth.config";
 

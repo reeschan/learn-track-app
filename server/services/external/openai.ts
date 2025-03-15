@@ -1,10 +1,10 @@
-import { OpenAICreateSummaryResponse } from "app/lib/types";
 import OpenAI from "openai";
+import { OpenAICreateSummaryResponse } from "server/lib/types";
 
 export interface IOpenAIService {
   createSummary(
     title: string,
-    content: string,
+    content: string
   ): Promise<OpenAICreateSummaryResponse>;
 }
 
@@ -19,7 +19,7 @@ export class OpenAIService implements IOpenAIService {
 
   async createSummary(
     title: string,
-    content: string,
+    content: string
   ): Promise<OpenAICreateSummaryResponse> {
     console.log(`要約するタイトル：${title} コンテンツ：${content}`);
 

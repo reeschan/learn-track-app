@@ -3,7 +3,7 @@ import {
   Google as GoogleIcon,
 } from "@mui/icons-material";
 import { Button } from "@mui/material";
-import { handleProviderSignIn } from "app/lib/actions";
+import { handleProviderSignIn } from "server/actions";
 
 type ProviderProps = {
   provider: {

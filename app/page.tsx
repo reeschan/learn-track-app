@@ -1,5 +1,5 @@
 "use client";
-import Loading from "app/ui/common/Loading";
+import Loading from "components/ui/common/Loading";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect } from "react";

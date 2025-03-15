@@ -1,5 +1,5 @@
-import { Item } from "app/lib/types";
 import { useState } from "react";
+import { Item } from "server/lib/types";
 
 export function useItemsManager(initialItems: Item[] = []) {
   const [items, setItems] = useState<Item[]>(initialItems);

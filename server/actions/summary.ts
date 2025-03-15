@@ -1,5 +1,5 @@
 "use server";
-import { prisma } from "app/lib/prisma";
+import { prisma } from "server/lib/prisma";
 import {
   CompleteSummaryRequest,
   CompleteSummaryResponse,
@@ -7,9 +7,9 @@ import {
   GetAllSummaryRequest,
   GetAllSummaryState,
   SummaryState,
-} from "app/lib/types";
-import { OpenAIService } from "app/services/external/openai";
-import { SummaryService } from "app/services/summary";
+} from "server/lib/types";
+import { OpenAIService } from "server/services/external/openai";
+import { SummaryService } from "server/services/summary";
 
 const summaryService = new SummaryService(prisma, new OpenAIService());
 

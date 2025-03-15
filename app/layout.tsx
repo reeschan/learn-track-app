@@ -1,7 +1,7 @@
-import AuthProvider from "./providers/AuthProvider";
-import { Suspense } from "react";
-import Loading from "app/ui/common/Loading";
+import Loading from "components/ui/common/Loading";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
+import AuthProvider from "./hooks/providers/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 

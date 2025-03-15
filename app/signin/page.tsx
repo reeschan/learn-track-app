@@ -1,5 +1,5 @@
-import SignInForm from "app/ui/signin/SignInForm";
 import { getProviderMap } from "auth";
+import SignInForm from "components/ui/signin/SignInForm";
 import { NextSegmentPage } from "next";
 
 const SignInPage: NextSegmentPage<{
