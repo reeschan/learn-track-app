@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useSession } from "next-auth/react";
-import { Box, CircularProgress, CssBaseline } from "@mui/material";
 import SidebarLayout from "./SidebarLayout";
 
 interface AuthenticatedLayoutProps {
@@ -22,16 +21,9 @@ export const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
   // クライアントサイドでのレンダリング
   if (isLoading) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-600 border-t-transparent"></div>
+      </div>
     );
   }
 
@@ -42,12 +34,9 @@ export const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
 
   // 未認証の場合はシンプルなレイアウト
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <CssBaseline />
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {children}
-      </Box>
-    </Box>
+    <div className="flex min-h-screen flex-col">
+      <main className="flex-grow p-4">{children}</main>
+    </div>
   );
 };
 
