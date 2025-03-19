@@ -1,31 +1,15 @@
 "use client";
 import {
-  Box,
-  Drawer,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  useMediaQuery,
-  useTheme,
-  CssBaseline,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
-  ChevronLeft as ChevronLeftIcon,
-  Dashboard as DashboardIcon,
-  Description as DocumentIcon,
-  Settings as SettingsIcon,
-} from "@mui/icons-material";
-import { useState } from "react";
-
-const drawerWidth = 240;
+  Bars3Icon,
+  ChevronLeftIcon,
+  HomeIcon,
+  DocumentTextIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { classNames } from "../../../utils/classNames";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
@@ -36,121 +20,134 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
   children,
   title = "アプリケーション",
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [open, setOpen] = useState(!isMobile);
+  const [isMobile, setIsMobile] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
-  const handleDrawerToggle = () => {
-    setOpen(!open);
-  };
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+    
+    return () => {
+      window.removeEventListener("resize", checkIfMobile);
+    };
+  }, []);
+
+  useEffect(() => {
+    // 非モバイル時は自動的にサイドバーを開く
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
+
+  // モバイル時にサイドバー開閉時に背景をロック
+  useEffect(() => {
+    if (isMobile) {
+      document.body.style.overflow = sidebarOpen ? "hidden" : "";
+    }
+    
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [sidebarOpen, isMobile]);
 
   const menuItems = [
-    { text: "ダッシュボード", icon: <DashboardIcon />, path: "/dashboard" },
-    { text: "サマリー", icon: <DocumentIcon />, path: "/summaries" },
-    { text: "設定", icon: <SettingsIcon />, path: "/settings" },
+    { text: "ダッシュボード", icon: <HomeIcon className="h-6 w-6" />, path: "/dashboard" },
+    { text: "サマリー", icon: <DocumentTextIcon className="h-6 w-6" />, path: "/summaries" },
+    { text: "設定", icon: <Cog6ToothIcon className="h-6 w-6" />, path: "/settings" },
   ];
 
-  const drawer = (
-    <>
-      <Toolbar
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          px: [1],
-        }}
-      >
-        <IconButton onClick={handleDrawerToggle}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </Toolbar>
-      <Divider />
-      <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton href={item.path}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </>
-  );
-
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          transition: theme.transitions.create(["width", "margin"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-          ...(open && {
-            marginLeft: drawerWidth,
-            width: `calc(100% - ${drawerWidth}px)`,
-            transition: theme.transitions.create(["width", "margin"], {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-          }),
-        }}
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
+      {/* モバイル用背景オーバーレイ */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-20 bg-gray-600 bg-opacity-75 transition-opacity"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* サイドバー */}
+      <div
+        className={classNames(
+          "fixed inset-y-0 left-0 z-30 flex w-64 flex-col bg-white transition-all duration-300 ease-in-out dark:bg-gray-800",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
+          isMobile ? "shadow-lg" : ""
+        )}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerToggle}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
+        <div className="flex h-16 items-center justify-between border-b border-gray-200 px-4 dark:border-gray-700">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+            Learn Track
+          </h2>
+          <button
+            type="button"
+            className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            onClick={() => setSidebarOpen(false)}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {title}
-          </Typography>
-        </Toolbar>
-      </AppBar>
+            <span className="sr-only">Close sidebar</span>
+            <ChevronLeftIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
+        </div>
+        
+        <div className="flex flex-grow flex-col overflow-y-auto">
+          <nav className="flex-1 space-y-1 px-2 py-4">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.path;
+              
+              return (
+                <Link
+                  key={item.text}
+                  href={item.path}
+                  className={classNames(
+                    isActive
+                      ? "bg-gray-100 text-primary-600 dark:bg-gray-700 dark:text-white"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white",
+                    "group flex items-center rounded-md px-2 py-2 text-base font-medium"
+                  )}
+                >
+                  <div
+                    className={classNames(
+                      isActive
+                        ? "text-primary-600 dark:text-white"
+                        : "text-gray-400 group-hover:text-gray-500 dark:group-hover:text-white",
+                      "mr-4 flex-shrink-0"
+                    )}
+                  >
+                    {item.icon}
+                  </div>
+                  {item.text}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
 
-      <Drawer
-        variant={isMobile ? "temporary" : "persistent"}
-        open={open}
-        onClose={isMobile ? handleDrawerToggle : undefined}
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-      >
-        {drawer}
-      </Drawer>
+      {/* メインコンテンツ */}
+      <div className="flex flex-1 flex-col md:pl-64">
+        <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow dark:bg-gray-800">
+          <button
+            type="button"
+            className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 md:hidden dark:border-gray-700 dark:text-gray-400"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <span className="sr-only">Open sidebar</span>
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          </button>
+          <div className="flex flex-1 items-center justify-between px-4">
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {title}
+            </h1>
+          </div>
+        </div>
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${open ? drawerWidth : 0}px)` },
-          ml: { sm: open ? `${drawerWidth}px` : 0 },
-          transition: theme.transitions.create(["margin", "width"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-        }}
-      >
-        <Toolbar /> {/* スペーサー */}
-        {children}
-      </Box>
-    </Box>
+        <main className="flex-1 bg-gray-100 p-6 dark:bg-gray-900">
+          {children}
+        </main>
+      </div>
+    </div>
   );
 };
 
