@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "pnpm generate && next build",
+    "build": "next build",
+    "build:generate": "pnpm generate && next build",
     "start": "next start -p $PORT",
     "migrate:dev": "pnpm exec prisma migrate dev",
     "migrate:prod": "pnpm exec prisma migrate deploy",

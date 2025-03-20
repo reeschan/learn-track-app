@@ -59,10 +59,10 @@ export class SummaryService implements ISummaryService {
       },
     });
 
-    return summaries.map((summary) => ({
+    return summaries.map((summary: any) => ({
       ...summary,
-      categories: summary.categories.map((c) => c.category.name),
-      tags: summary.tags.map((t) => t.tag.name),
+      categories: summary.categories.map((c: any) => c.category.name),
+      tags: summary.tags.map((t: any) => t.tag.name),
     }));
   }
 
