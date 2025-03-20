@@ -33,6 +33,7 @@ jobs:
       - name: Lint Check
         run: pnpm run lint
 
+      # 型チェックでエラーが出るため、型チェックを実行する前にPrisma Clientを生成する
       - name: Generate Prisma Client
         run: pnpm run generate
 
@@ -45,7 +46,7 @@ jobs:
 
       # ビルドチェック
       - name: Build Check
-        run: pnpm run build
+        run: pnpm run build:no-generate
 
   migration_db:
     runs-on: ubuntu-22.04
