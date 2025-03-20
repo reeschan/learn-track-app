@@ -33,6 +33,9 @@ jobs:
       - name: Lint Check
         run: pnpm run lint
 
+      - name: Generate Prisma Client
+        run: pnpm run generate
+
       - name: Type Check
         run: pnpm run type-check
 

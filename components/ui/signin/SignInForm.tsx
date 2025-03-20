@@ -1,13 +1,5 @@
 "use client";
-import {
-  Box,
-  Container,
-  Paper,
-  Typography,
-  Divider,
-  Alert,
-} from "@mui/material";
-import CredentialsForm from "./CredentialsForm";
+import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
 import ProviderSignInButton from "./ProviderSignInButton";
 
 type Provider = {
@@ -42,91 +34,60 @@ export default function SignInForm({
   const errorMessage = getErrorMessage(error);
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 8, mb: 8 }}>
-      <Paper
-        elevation={3}
-        sx={{
-          p: 4,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          borderRadius: 2,
-        }}
-      >
-        <Typography
-          component="h1"
-          variant="h4"
-          sx={{
-            mb: 3,
-            fontWeight: 600,
-            color: "primary.main",
-          }}
-        >
-          Welcome
-        </Typography>
+    <div className="mx-auto mt-16 max-w-md px-4 sm:px-6 md:mt-24 lg:px-8">
+      <div className="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-800">
+        <div className="px-4 py-5 sm:p-6">
+          <div className="flex flex-col items-center">
+            <h1 className="mb-3 text-2xl font-semibold text-primary-600">
+              Welcome
+            </h1>
 
-        <Typography
-          variant="body1"
-          sx={{ mb: 3, textAlign: "center", color: "text.secondary" }}
-        >
-          Log in to your account to continue
-        </Typography>
+            <p className="mb-6 text-center text-gray-500">
+              Log in to your account to continue
+            </p>
 
-        {errorMessage && (
-          <Alert severity="error" sx={{ width: "100%", mb: 3 }}>
-            {errorMessage}
-          </Alert>
-        )}
+            {errorMessage && (
+              <div className="mb-4 w-full rounded-md bg-red-50 p-4 dark:bg-red-900/30">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <ExclamationCircleIcon
+                      className="h-5 w-5 text-red-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+                      {errorMessage}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            )}
+            {providers.length > 0 && (
+              <>
+                <div className="flex w-full flex-col gap-3">
+                  {providers.map((provider) => (
+                    <ProviderSignInButton
+                      key={provider.id}
+                      provider={provider}
+                      callbackUrl={callbackUrl}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
 
-        <CredentialsForm />
-
-        {providers.length > 0 && (
-          <>
-            <Divider sx={{ width: "100%", mb: 3 }}>
-              <Typography variant="body2" color="text.secondary">
-                or continue with
-              </Typography>
-            </Divider>
-
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-              }}
-            >
-              {providers.map((provider) => (
-                <ProviderSignInButton
-                  key={provider.id}
-                  provider={provider}
-                  callbackUrl={callbackUrl}
-                />
-              ))}
-            </Box>
-          </>
-        )}
-
-        <Box sx={{ mt: 4, textAlign: "center" }}>
-          <Typography variant="body2" color="text.secondary">
-            <Typography
-              component="a"
-              href="/signup"
-              variant="body2"
-              sx={{
-                color: "primary.main",
-                textDecoration: "none",
-                fontWeight: 600,
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              Sign up
-            </Typography>
-          </Typography>
-        </Box>
-      </Paper>
-    </Container>
+            <div className="mt-8 text-center">
+              <a
+                href="/signup"
+                className="text-sm font-semibold text-primary-600 hover:underline"
+              >
+                Sign up
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
