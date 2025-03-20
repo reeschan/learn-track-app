@@ -1,6 +1,5 @@
 "use client";
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
-import CredentialsForm from "./CredentialsForm";
 import ProviderSignInButton from "./ProviderSignInButton";
 
 type Provider = {
@@ -64,19 +63,8 @@ export default function SignInForm({
                 </div>
               </div>
             )}
-
-            <CredentialsForm />
-
             {providers.length > 0 && (
               <>
-                <div className="my-6 flex w-full items-center">
-                  <div className="flex-grow border-t border-gray-300"></div>
-                  <span className="mx-4 flex-shrink text-sm text-gray-500">
-                    or continue with
-                  </span>
-                  <div className="flex-grow border-t border-gray-300"></div>
-                </div>
-
                 <div className="flex w-full flex-col gap-3">
                   {providers.map((provider) => (
                     <ProviderSignInButton

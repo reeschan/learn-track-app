@@ -25,7 +25,7 @@ const ItemField: React.FC<ItemProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       handleAddItem();
     }
@@ -44,6 +44,7 @@ const ItemField: React.FC<ItemProps> = ({
             className="block w-full rounded-md border-gray-300 pr-10 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
           />
           <button
+            title="Add"
             type="button"
             onClick={handleAddItem}
             className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-500"
@@ -52,7 +53,7 @@ const ItemField: React.FC<ItemProps> = ({
           </button>
         </div>
       </div>
-      
+
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
           <span

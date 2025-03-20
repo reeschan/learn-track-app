@@ -1,18 +1,6 @@
-"use client";
-import Loading from "components/ui/common/Loading";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { Suspense, useEffect } from "react";
+import { checkAuth } from "server/lib/auth";
 
-export default function Home() {
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      router.push("/summary/create");
-    }
-  }, [session, router]);
-
-  return <Suspense fallback={<Loading />}></Suspense>;
+export default async function Home() {
+  await checkAuth();
+  return <></>;
 }

@@ -1,8 +1,9 @@
+import AuthenticatedLayout from "components/ui/common/AuthenticatedLayout";
 import Loading from "components/ui/common/Loading";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
-import AuthProvider from "./hooks/providers/AuthProvider";
 import "./globals.css";
+import AuthProvider from "./hooks/providers/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="ja" className="h-full">
       <body className={`h-full ${inter.className}`}>
         <AuthProvider>
-          <Suspense fallback={<Loading />}>{children}</Suspense>
+          <Suspense fallback={<Loading />}>
+            <AuthenticatedLayout>{children}</AuthenticatedLayout>
+          </Suspense>
         </AuthProvider>
       </body>
     </html>

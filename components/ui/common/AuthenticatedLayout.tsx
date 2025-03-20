@@ -1,7 +1,5 @@
-"use client";
-
+import { auth } from "auth";
 import React from "react";
-import { useSession } from "next-auth/react";
 import SidebarLayout from "./SidebarLayout";
 
 interface AuthenticatedLayoutProps {
@@ -9,14 +7,14 @@ interface AuthenticatedLayoutProps {
   title?: string;
 }
 
-export const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
+export const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = async ({
   children,
   title,
 }) => {
   // クライアントサイドレンダリング用の状態
-  const { status } = useSession();
-  const isLoading = status === "loading";
-  const isAuthenticated = status === "authenticated";
+  const session = await auth();
+  const isLoading = session?.user === null;
+  const isAuthenticated = session?.user !== null;
 
   // クライアントサイドでのレンダリング
   if (isLoading) {
