@@ -11,3 +11,9 @@ export async function checkAuth() {
     redirect("/signin");
   }
 }
+
+export async function getUserId() {
+  await checkAuth();
+  const session = await auth();
+  return session?.user?.id;
+}

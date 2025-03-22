@@ -1,21 +1,20 @@
 import { PrismaClient } from "@prisma/client";
-import { auth } from "auth";
 import { LogRequestResponse } from "server/lib/decorators/logDecorator";
 import {
   CompleteSummaryRequest,
   CreateSummaryRequest,
   CreateSummaryResponse,
-  GetAllSummaryRequest,
   Summary,
-} from "server/lib/types";
+} from "server/lib/types/summary";
 import { IOpenAIService } from "server/services/external/openai";
 
 export interface ISummaryService {
-  getAllsummary(getAllSummaryRequest: GetAllSummaryRequest): Promise<Summary[]>;
+  getAllsummary(userId: string): Promise<Summary[]>;
   createSummary(
     createSummaryRequest: CreateSummaryRequest
   ): Promise<CreateSummaryResponse>;
   completeSummary(
+    userId: string,
     completeSummaryRequest: CompleteSummaryRequest
   ): Promise<Summary>;
 }
@@ -28,14 +27,12 @@ export class SummaryService implements ISummaryService {
   ) {}
 
   @LogRequestResponse
-  async getAllsummary(
-    getAllSummaryRequest: GetAllSummaryRequest
-  ): Promise<Summary[]> {
+  async getAllsummary(userId: string): Promise<Summary[]> {
     // summaryに紐づくcategoryとtagを取得
     // categoryとtagはnameだけ取得
     const summaries = await this.prisma.summary.findMany({
       where: {
-        userId: getAllSummaryRequest.userId,
+        userId: userId,
       },
       include: {
         categories: {
@@ -84,12 +81,12 @@ export class SummaryService implements ISummaryService {
 
   @LogRequestResponse
   async completeSummary(
+    userId: string,
     completeSummaryRequest: CompleteSummaryRequest
   ): Promise<Summary> {
-    const session = await auth();
     const summary = await this.prisma.summary.create({
       data: {
-        userId: session?.user?.id!,
+        userId: userId,
         title: completeSummaryRequest.title,
         content: completeSummaryRequest.content,
         summary: completeSummaryRequest.summary,

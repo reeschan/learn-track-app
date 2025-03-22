@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { OpenAICreateSummaryResponse } from "server/lib/types";
+import { OpenAICreateSummaryResponse } from "server/lib/types/summary";
 
 export interface IOpenAIService {
   createSummary(
@@ -29,57 +29,62 @@ export class OpenAIService implements IOpenAIService {
         {
           role: "system",
           content:
-            "あなたは高度な文章要約を行うAIアシスタントです。\n\
-            入力された文章を以下の要件に従って要約し、タグ付け、カテゴライズを行ってください。\n\n\
-            ",
+            "あなたは高度な文章要約を行うAIアシスタントです。入力された文章を要約し、タグ付け、カテゴライズを行います。必ず指定された形式で出力してください。",
         },
         {
           role: "user",
           content:
-            `タイトルとコンテンツを読み込んで、詳細な要約を作成してください。: タイトル：${title} コンテンツ：${content}\n\n` +
-            "## 要件\n\
-            1. **要約**: 読み込んだ文章を簡潔に要約してください。要点が明確になるようにしてください。\n\
-            2. **タグ**: 文章の内容を端的に表すキーワードを複数選び、カンマ(,)区切りで出力してください。\n\
-            3. **カテゴリー**: 文章が属するカテゴリ（例: テクノロジー, ビジネス, 健康 など）を複数選び、カンマ(,)区切りで出力してください。\n\n\
-            ## 出力フォーマット\n\
-            ```\n\
-              summary:<要約>\n\
-              tags:<タグ,タグ,タグ>\n\
-              categories:<カテゴリー,カテゴリー,カテゴリー>\n\
-            ```\n\n\
-            要約ができない場合は、summaryはnullを返してください。\n\
-            **注意点**:\n\
-            - タグとカテゴリーは、意味が明確になるように選択してください。\n\
-            - 出力の大部分は日本語で記述してください（特定の固有名詞などを除く）。",
+            `以下のタイトルとコンテンツを読み込んで要約してください:\n\nタイトル：${title}\nコンテンツ：${content}\n\n` +
+            "以下の形式で厳密に出力してください。各行の先頭に「summary:」「tags:」「categories:」を付け、それ以外の文字は含めないでください。\n\n" +
+            "summary:[ここに要約を記入]\n" +
+            "tags:[タグ1],[タグ2],[タグ3]\n" +
+            "categories:[カテゴリ1],[カテゴリ2],[カテゴリ3]\n\n" +
+            "要約のルール:\n" +
+            "1. 要約は簡潔かつ要点が明確になるようにしてください\n" +
+            "2. タグは文章の内容を端的に表すキーワードを複数選んでください\n" +
+            "3. カテゴリは文章が属する分野（例: テクノロジー, ビジネス, 健康など）を選んでください\n" +
+            "4. 要約ができない場合は「summary:null」と出力してください\n" +
+            "5. 出力は日本語で行ってください（特定の固有名詞を除く）\n" +
+            "6. 指定された形式以外の文字は含めないでください",
         },
       ],
+      temperature: 0.3,
     });
 
-    const lines = response.choices[0].message.content?.split("\n");
+    const message = response.choices[0].message.content?.trim() || "";
 
-    if (!lines) {
-      throw new Error("AI response is empty");
-    }
+    const summaryMatch = message.match(/summary:(.*?)(?=\ntags:|$)/s);
+    const tagsMatch = message.match(/tags:(.*?)(?=\ncategories:|$)/s);
+    const categoriesMatch = message.match(/categories:(.*?)(?=\n|$)/s);
 
-    const summary = lines[1]?.replace("summary:", "") || "";
-    if (summary === " null" || summary === "null" || summary === "  null") {
+    const summary = summaryMatch ? summaryMatch[1].trim() : "";
+
+    if (summary === "null") {
       throw new Error("要約ができませんでした。");
     }
 
-    console.log(`要約結果：${lines}`);
+    const tags = tagsMatch
+      ? tagsMatch[1]
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag)
+      : [];
+
+    const categories = categoriesMatch
+      ? categoriesMatch[1]
+          .split(",")
+          .map((category) => category.trim())
+          .filter((category) => category)
+      : [];
+
+    console.log(
+      `要約結果: summary=${summary}, tags=${tags}, categories=${categories}`
+    );
 
     return {
       summary,
-      tags:
-        lines[2]
-          ?.replace("tags:", "")
-          .split(",")
-          .map((tag) => tag.trim()) || [],
-      categories:
-        lines[3]
-          ?.replace("categories:", "")
-          .split(",")
-          .map((category) => category.trim()) || [],
+      tags,
+      categories,
     };
   }
 }

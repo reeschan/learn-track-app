@@ -1,6 +1,6 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
-import { Item } from "server/lib/types";
+import { Item } from "server/lib/types/common";
 
 type ItemProps = {
   label: string;
@@ -54,7 +54,7 @@ const ItemField: React.FC<ItemProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 mt-2">
         {items.map((item) => (
           <span
             key={item.text}
