@@ -1,10 +1,10 @@
-import { createFieldMap } from "server/lib/util";
+import { createFieldMap } from "server/libs/util";
 
 // ============================================================
 // サマリーのデータモデル
 // ============================================================
 
-import { RequestState, ZodErrors } from "server/lib/types/common";
+import { RequestState, ZodErrors } from "server/libs/types/common";
 
 // 基本となるサマリーモデル
 export interface Summary {

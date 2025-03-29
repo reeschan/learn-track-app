@@ -1,6 +1,7 @@
+"use client";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
-import { Item } from "server/lib/types/common";
+import { Item } from "server/libs/types/common";
 
 type ItemProps = {
   label: string;

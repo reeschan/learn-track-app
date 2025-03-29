@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Summary } from "server/lib/types/summary";
+import { Summary } from "server/libs/types/summary";
 
 export const SummaryList = ({ summaries }: { summaries: Summary[] }) => {
   const router = useRouter();

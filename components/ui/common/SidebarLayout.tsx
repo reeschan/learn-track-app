@@ -2,13 +2,12 @@
 import {
   Bars3Icon,
   ChevronLeftIcon,
-  HomeIcon,
-  DocumentTextIcon,
   Cog6ToothIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { classNames } from "../../../utils/classNames";
 
 interface SidebarLayoutProps {
@@ -28,10 +27,10 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkIfMobile();
     window.addEventListener("resize", checkIfMobile);
-    
+
     return () => {
       window.removeEventListener("resize", checkIfMobile);
     };
@@ -47,23 +46,30 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
     if (isMobile) {
       document.body.style.overflow = sidebarOpen ? "hidden" : "";
     }
-    
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [sidebarOpen, isMobile]);
 
   const menuItems = [
-    { text: "ダッシュボード", icon: <HomeIcon className="h-6 w-6" />, path: "/dashboard" },
-    { text: "サマリー", icon: <DocumentTextIcon className="h-6 w-6" />, path: "/summaries" },
-    { text: "設定", icon: <Cog6ToothIcon className="h-6 w-6" />, path: "/settings" },
+    {
+      text: "サマリー",
+      icon: <DocumentTextIcon className="h-6 w-6" />,
+      path: "/summary",
+    },
+    {
+      text: "設定",
+      icon: <Cog6ToothIcon className="h-6 w-6" />,
+      path: "/settings",
+    },
   ];
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       {/* モバイル用背景オーバーレイ */}
       {isMobile && sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-20 bg-gray-600 bg-opacity-75 transition-opacity"
           onClick={() => setSidebarOpen(false)}
         />
@@ -90,12 +96,12 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({
             <ChevronLeftIcon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        
+
         <div className="flex flex-grow flex-col overflow-y-auto">
           <nav className="flex-1 space-y-1 px-2 py-4">
             {menuItems.map((item) => {
               const isActive = pathname === item.path;
-              
+
               return (
                 <Link
                   key={item.text}

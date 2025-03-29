@@ -2,7 +2,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { NextAuthConfig } from "next-auth";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import { prisma } from "server/lib/prisma";
+import { prisma } from "server/libs/prisma";
 
 export const authConfig = {
   debug: process.env.NODE_ENV === "development",

@@ -5,9 +5,7 @@ import { redirect } from "next/navigation";
 
 export async function checkAuth() {
   const session = await auth();
-  if (session) {
-    redirect("/summary/create");
-  } else {
+  if (!session) {
     redirect("/signin");
   }
 }

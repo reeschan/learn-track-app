@@ -1,14 +1,14 @@
 "use server";
-import { getUserId } from "server/lib/auth";
-import { prisma } from "server/lib/prisma";
-import { CompleteSummarySchema, CreateSummarySchema } from "server/lib/schema";
+import { getUserId } from "server/libs/auth";
+import { prisma } from "server/libs/prisma";
+import { CompleteSummarySchema, CreateSummarySchema } from "server/libs/schema";
 import {
   CompleteSummaryRequest,
   CreateSummaryRequest,
   GetAllSummaryState,
   SummaryFieldMap,
   SummaryState,
-} from "server/lib/types/summary";
+} from "server/libs/types/summary";
 import { OpenAIService } from "server/services/external/openai";
 import { SummaryService } from "server/services/summary";
 

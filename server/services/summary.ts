@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { LogRequestResponse } from "server/lib/decorators/logDecorator";
+import { LogRequestResponse } from "server/libs/decorators/logDecorator";
 import {
   CompleteSummaryRequest,
   CreateSummaryRequest,
   CreateSummaryResponse,
   Summary,
-} from "server/lib/types/summary";
+} from "server/libs/types/summary";
 import { IOpenAIService } from "server/services/external/openai";
 
 export interface ISummaryService {

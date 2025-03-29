@@ -1,4 +1,4 @@
-import { checkAuth } from "server/lib/auth";
+import { checkAuth } from "server/libs/auth";
 
 export default async function Home() {
   await checkAuth();
